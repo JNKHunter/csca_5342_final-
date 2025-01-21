@@ -40,7 +40,7 @@ robot_joints = {
 
 # Dictionary to store encoder handles
 encoders = {}
-devices = {}
+motors = {}
 
 # Loop through the joint names to create the encoder dictionary
 for joint_name in robot_joints.keys():
@@ -58,7 +58,7 @@ for joint_name in robot_joints.keys():
 for joint_name, target_position in robot_joints.items():
 	motor = robot.getDevice(joint_name)  # Get the motor device
 	motor.setPosition(target_position)  # Set the target position
-	devices[joint_name] = motor  # Store the motor handle
+	motors[joint_name] = motor  # Store the motor handle
 has_run = False
 
 
@@ -72,7 +72,7 @@ class ServoJoint(py_trees.behaviour.Behaviour):
 		self.joint_name = joint_name
 		self.target_position = target_position
 		self.timestep = timestep
-		self.motor = self.robot.getDevice(joint_name)
+		self.motor = motors.get(joint_name)
 		self.encoder = self.robot.getDevice(f"{joint_name}_sensor")
 		self.encoder.enable(timestep)
 		self.motor.setPosition(float('inf'))  # Enable velocity control
@@ -166,6 +166,7 @@ joint_targets = {
 threshold = 0.1
 
 # Create the ServoArm behavior tree node
+#servo_arm_node = ServoArm(robot, joint_targets, timestep, threshold)
 servo_arm_node = ServoArm(robot, joint_targets, timestep, threshold)
 
 # Create a root for the PyTrees tree
@@ -174,10 +175,10 @@ root.add_child(servo_arm_node)
 
 # Run the PyTrees behavior tree
 while robot.step(timestep) != -1:
-	status = root.tick_once()
-	if status == py_trees.common.Status.SUCCESS:
+	root.tick_once()
+	if root.status == py_trees.common.Status.SUCCESS:
 		print("All joints reached their target positions.")
 		break
-	elif status == py_trees.common.Status.RUNNING:
+	elif root.status == py_trees.common.Status.RUNNING:
 		print("Moving joints to target positions...")
 
