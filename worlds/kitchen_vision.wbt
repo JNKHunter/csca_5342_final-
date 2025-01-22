@@ -41,11 +41,12 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/kitchen/breakfast/protos/BiscuitBox.proto"
 
 WorldInfo {
+  basicTimeStep 16.0
 }
 Viewpoint {
   fieldOfView 1.1
-  orientation -0.19442561993110857 0.9790186683121553 0.061001027947879746 0.7874481557428243
-  position -1.2240594715187738 0.24640082791346257 2.5443038921646486
+  orientation -0.4369215115514362 0.19932528375882536 0.8771368331099043 2.083395322325014
+  position 0.8761294260617511 -3.011767993307635 5.291127919509912
   exposure 0.7999999999999999
 }
 TexturedBackground {
@@ -5620,6 +5621,6 @@ Robot {
     density -1
     mass 28.26649
   }
-  controller "vision_controller"
+  controller "main_controller"
   supervisor TRUE
 }
