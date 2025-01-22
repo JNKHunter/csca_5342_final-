@@ -4,6 +4,7 @@ from py_trees.common import Status
 import py_trees
 import numpy as np
 
+#Sensors are not named consistently
 def get_sensor_name_for_joint(joint_name):
     if 'gripper_left_finger_joint' == joint_name:
         sensor_name = 'gripper_left_sensor_finger_joint'
@@ -20,7 +21,7 @@ class ServoArm(py_trees.behaviour.Behaviour):
         self.joint_targets = joint_targets
         print(joint_targets)
         self.timestep = blackboard.get('timestep')
-        self.threshold = threshold  # Error threshold to stop movement
+        self.threshold = threshold
         self.motors = {}
         self.encoders = {}
 
@@ -29,8 +30,6 @@ class ServoArm(py_trees.behaviour.Behaviour):
             motor = self.robot.getDevice(joint_name)
             encoder = self.robot.getDevice(get_sensor_name_for_joint(joint_name))
             encoder.enable(blackboard.get('timestep'))
-            motor.setPosition(float('inf'))  # Enable velocity control
-            #motor.setVelocity(1.0)  # Set a default velocity
             self.motors[joint_name] = motor
             self.encoders[joint_name] = encoder
 
