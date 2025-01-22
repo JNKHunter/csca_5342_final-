@@ -41,7 +41,7 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/kitchen/breakfast/protos/BiscuitBox.proto"
 
 WorldInfo {
-  basicTimeStep 16.0
+  basicTimeStep 16
 }
 Viewpoint {
   fieldOfView 1.1
@@ -889,6 +889,8 @@ Robot {
     GPS {
     }
     Display {
+      width 430
+      height 567
     }
     DEF BODY_EXTENSION Pose {
       children [
@@ -1387,7 +1389,7 @@ Robot {
                                                   ]
                                                   endPoint DEF ARM_4 Solid {
                                                     translation -0.02 -0.027 -0.222
-                                                    rotation -0.5773502691896256 -0.577350269189626 -0.5773502691896255 2.0943999999999963
+                                                    rotation -0.5773502691896257 -0.5773502691896261 -0.5773502691896256 2.0943999999999963
                                                     children [
                                                       DEF ARM_4_SH1 Shape {
                                                         appearance PBRAppearance {
