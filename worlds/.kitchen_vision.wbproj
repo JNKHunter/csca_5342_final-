@@ -11,4 +11,4 @@ consoles: Console:All:All
 renderingDevicePerspectives: TIAGo:Astra depth;1;0.65625;0;0
 renderingDevicePerspectives: TIAGo:Astra rgb;0;0.296772;0.577238;0.0493936
 renderingDevicePerspectives: TIAGo:camera;1;1.72622;0.752251;0.0275429
-renderingDevicePerspectives: TIAGo:display;1;0.378027;0.0384615;0.49921
+renderingDevicePerspectives: TIAGo:display;1;0.673721;0.0124418;0.0269145
