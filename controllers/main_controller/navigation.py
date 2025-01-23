@@ -51,7 +51,7 @@ class Navigation(Behaviour):
             self.rightspeed = 0
             self.leftmotor.setVelocity(self.leftspeed)
             self.rightmotor.setVelocity(self.rightspeed)
-            self.blackboard['num_navigations'] = self.blackboard.get('num_navigations') + 1
+            #self.blackboard['num_navigations'] = self.blackboard.get('num_navigations') + 1
             return Status.SUCCESS
 
         if not self.has_run:

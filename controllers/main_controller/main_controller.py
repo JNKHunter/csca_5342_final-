@@ -77,7 +77,7 @@ Tha Navigation class is also pretty standard. The navigation routine takes as in
 '''
 
 tree = Sequence("Main", children = [
-	#ServoArm('Move arm to safety',safety,blackboard),
+	ServoArm('Move arm to safety',safety,blackboard),
 	Selector('Does map exist?', children=[
         DoesMapExist('Check for saved map',blackboard),
         Parallel("Mapping",ParallelPolicy.SuccessOnOne(), children=[
