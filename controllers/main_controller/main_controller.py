@@ -86,7 +86,10 @@ tree = Sequence("Main", children = [
             Navigation("move around the table", blackboard) 
         ])		
     ],memory=True),
-	Planning("compute path to lower left corner",blackboard,(-1.36,-3.22))
+	Planning("compute path to lower left corner",blackboard,(-1.36,-3.22)),
+	Navigation("move to the lower left ocrner",blackboard),
+    Planning("compute path to sink",blackboard,(0.01, 0.01)), 
+    Navigation("move to sink",blackboard)
 ],memory=True)
 
 
