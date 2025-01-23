@@ -1385,7 +1385,7 @@ Robot {
                                                   ]
                                                   endPoint DEF ARM_4 Solid {
                                                     translation -0.02 -0.027 -0.222
-                                                    rotation -0.5773502691896256 -0.577350269189626 -0.5773502691896255 2.0943999999999963
+                                                    rotation -0.5773502691896257 -0.5773502691896261 -0.5773502691896256 2.0943999999999963
                                                     children [
                                                       DEF ARM_4_SH1 Shape {
                                                         appearance PBRAppearance {
@@ -5127,7 +5127,7 @@ Robot {
             }
             endPoint DEF SMALL_WHEEL Solid {
               translation -0.016 0 -0.04
-              rotation -1 -7.8504478752795295e-16 -1.5700895750559056e-16 1.5707999999999966
+              rotation -1 -7.85044787527953e-16 -1.5700895750559056e-16 1.5707999999999966
               children [
                 DEF SMALL_WHEEL_SHAPE Shape {
                   appearance PBRAppearance {

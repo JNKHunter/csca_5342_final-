@@ -23,19 +23,21 @@ blackboard = {}
 blackboard['robot'] = robot
 blackboard['map_width'] = 430 
 blackboard['map_height'] = 567 
-#blackboard['timestep'] = int(robot.getBasicTimeStep())
 blackboard['timestep'] = int(robot.getBasicTimeStep())
 blackboard['compass'] = robot.getDevice('compass')
 blackboard['gps'] = robot.getDevice('gps')
 blackboard['lidar'] = robot.getDevice('Hokuyo URG-04LX-UG01')
 blackboard['leftmotor'] = robot.getDevice('wheel_left_joint')
 blackboard['rightmotor'] = robot.getDevice('wheel_right_joint')
+blackboard['camera'] = robot.getDevice('camera')
 
 blackboard.get('compass').enable(blackboard.get('timestep'))
 blackboard.get('gps').enable(blackboard.get('timestep'))
 blackboard.get('lidar').enable(blackboard.get('timestep'))
-blackboard['filepath'] = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/cspace.npy'
+blackboard.get('camera').enable(blackboard.get('timestep'))
+blackboard.get('camera').recognitionEnable(blackboard.get('timestep'))
 
+blackboard['filepath'] = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/cspace.npy'
 
 print(f'world timestep is {blackboard.get('timestep')}')
 
