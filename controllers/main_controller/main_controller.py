@@ -5,9 +5,10 @@ from py_trees.composites import Sequence,Parallel,Selector
 from py_trees import logging as log_tree
 
 import numpy as np
+import os
 
 from servoarm import ServoArm
-from mapping import Mapping
+from mapping import Mapping, DoesMapExist
 from navigation import Navigation
 
 # create the Robot instance.
@@ -32,6 +33,7 @@ blackboard['rightmotor'] = robot.getDevice('wheel_right_joint')
 blackboard.get('compass').enable(blackboard.get('timestep'))
 blackboard.get('gps').enable(blackboard.get('timestep'))
 blackboard.get('lidar').enable(blackboard.get('timestep'))
+blackboard['filepath'] = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/cspace.npy'
 
 
 print(f'world timestep is {blackboard.get('timestep')}')
@@ -55,22 +57,45 @@ safety = {
 
 blackboard['waypoints'] = mapping_waypoints
 
-# Behavior tree for robot behavior sequencing
+'''
+The behavior tree declaration.
+DoesMapExist
+If the Map Exists, we skip the mapping subroutine and go straight to planning the lower left corner path.
+
+Mapping
+The mapping class is standard and uses the same codebase as our previous peer graded assignments.
+As input, the Mapping class uses the lidar information to create a probability map and then uses
+the completed probability map to produce the convolution map.
+
+Planning
+Planning class uses the Rapidly-exploring Random Trees algorithm (RRT) with straight line collision checking.
+My point sampling algorithm biases towards the goal 10% of the time.
+As input, the RTT algorithm  uses the convolution map, the robot's current x,y coords, and the goal x,y coords to plan the path.
+
+Navigation
+Tha Navigation class is also pretty standard. The navigation routine takes as input an array of waypoints, and uses those waypoints to guide the robot on a path from start to goal nodes.
+'''
+
 tree = Sequence("Main", children = [
 	ServoArm('Move arm to safety',safety,blackboard),
-	Parallel("Mapping",ParallelPolicy.SuccessOnOne(), children=[
-        Mapping("map the environment", blackboard),
-        Navigation("move around the table", blackboard) 
-    ])
+	Selector('Does map exist?', children=[
+        DoesMapExist('Check for saved map',blackboard),
+        Parallel("Mapping",ParallelPolicy.SuccessOnOne(), children=[
+            Mapping("map the environment", blackboard),
+            Navigation("move around the table", blackboard) 
+        ])		
+    ],memory=True)
 ],memory=True)
+
 
 
 tree.setup_with_descendants()
 log_tree.level = log_tree.Level.DEBUG
+
 while robot.step(blackboard.get('timestep')) != -1:
 	tree.tick_once()
-	'''if tree.status == Status.SUCCESS:
+	if tree.status == Status.SUCCESS:
 		print("All joints reached their target positions.")
 		break
 	elif tree.status == Status.RUNNING:
-		print("Moving joints to target positions...")'''
+		print("Moving joints to target positions...")

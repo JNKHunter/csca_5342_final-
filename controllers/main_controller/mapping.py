@@ -6,6 +6,7 @@ from scipy import signal
 from matplotlib import pyplot as plt
 import numpy as np
 import math
+import os
 
 def draw_pixel(display,x,y,color=0xFF0000):
     display.setColor(color)
@@ -109,5 +110,20 @@ class Mapping(Behaviour):
             cspace = cmap>0.9
             self.blackboard['cspace'] = cspace
         return new_status
+    
+class DoesMapExist(Behaviour):
+    def __init__(self,name,blackboard):
+        super(DoesMapExist, self).__init__(name)
+        self.blackboard = blackboard
 
-
+    def update(self):
+        self.logger.debug(f"DoesMapExist::update {self.name}")
+        file_exists = exists(self.blackboard.get('filepath'))
+        if(file_exists):
+            print("Map already exists")
+            cspace = np.load(self.blackboard.get('filepath'))
+            self.blackboard['cspace'] = cspace
+            return Status.SUCCESS
+        else:
+            print("Map does not exist")
+            return Status.FAILURE  
