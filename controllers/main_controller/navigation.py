@@ -22,10 +22,10 @@ class Navigation(Behaviour):
         self.rightmotor = self.robot.getDevice('wheel_right_joint')
 
         self.leftmotor.setPosition(float('inf'))
-        self.leftmotor.setVelocity(self.leftspeed)
+        self.leftmotor.setVelocity(0)
 
         self.rightmotor.setPosition(float('inf'))
-        self.rightmotor.setVelocity(self.rightspeed)
+        self.rightmotor.setVelocity(0)
 
         self.gps = self.robot.getDevice('gps')
         self.gps.enable(self.timestep)

@@ -39,6 +39,7 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/kitchen/breakfast/protos/JamJar.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/kitchen/breakfast/protos/CerealBox.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/kitchen/breakfast/protos/BiscuitBox.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/balls/protos/PingPongBall.proto"
 
 WorldInfo {
   basicTimeStep 16
@@ -46,7 +47,7 @@ WorldInfo {
 Viewpoint {
   fieldOfView 1.1
   orientation -0.4369215115514362 0.19932528375882536 0.8771368331099043 2.083395322325014
-  position 0.8761294260617511 -3.011767993307635 5.291127919509912
+  position 1.3466216753429427 -3.472885842010144 4.768231868671341
   exposure 0.7999999999999999
 }
 TexturedBackground {
@@ -5625,4 +5626,7 @@ Robot {
   }
   controller "main_controller"
   supervisor TRUE
+}
+DEF marker PingPongBall {
+  translation 0.8 0 0.02
 }
