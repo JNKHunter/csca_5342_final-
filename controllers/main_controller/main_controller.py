@@ -10,6 +10,7 @@ import os
 from servoarm import ServoArm
 from mapping import Mapping, DoesMapExist
 from navigation import Navigation
+from planning import Planning
 
 # create the Robot instance.
 robot = Supervisor()
@@ -84,7 +85,11 @@ tree = Sequence("Main", children = [
             Mapping("map the environment", blackboard),
             Navigation("move around the table", blackboard) 
         ])		
-    ],memory=True)
+    ],memory=True),
+	Planning("compute path to lower left corner",blackboard,(-1.36,-3.22)),
+	Navigation("move to the lower left ocrner",blackboard),
+    Planning("compute path to sink",blackboard,(0.01, 0.01)), 
+    Navigation("move to sink",blackboard)
 ],memory=True)
 
 
