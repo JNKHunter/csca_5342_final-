@@ -36,20 +36,11 @@ class Mapping(Behaviour):
         self.robot = blackboard.get('robot')
         self.filepath = blackboard.get('filepath')
         self.blackboard = blackboard
-
-    def setup(self):
-        self.hasrun = False
-        self.logger.debug(f"Mapping::setup {self.name}")
+        
+        self.gps = blackboard.get('gps')
+        self.compass = blackboard.get('compass')
+        self.lidar = blackboard.get('lidar')
         self.timestep = self.blackboard.get('timestep')
-
-        self.gps = self.robot.getDevice('gps')
-        self.gps.enable(self.timestep)
-
-        self.compass = self.robot.getDevice('compass')
-        self.compass.enable(self.timestep)
-        self.lidar = self.robot.getDevice('Hokuyo URG-04LX-UG01')
-        self.lidar.enable(self.timestep)
-
         #Compensate for lidar not oriented at 0,0 in robot coordinates
         self.lidar_translation_x = 0.202
         self.lidar_translation_y = -0.004
@@ -62,8 +53,11 @@ class Mapping(Behaviour):
         self.map_width = 430
         self.map_height = 567
 
+        self.hasrun = False
+
         #self.angles = np.linspace(2.0944, -2.0944, len(self.lidar.getRangeImage()))[self.lidar_drop:-self.lidar_drop]
         self.prob_map = np.zeros((self.map_width,self.map_height))
+
 
 
     def update(self):
@@ -113,7 +107,6 @@ class Mapping(Behaviour):
             kernel = np.ones((55,55))
             cmap = signal.convolve2d(self.prob_map,kernel,mode='same')
             cspace = cmap>0.9
-            np.save(self.filepath,cspace)
             self.blackboard['cspace'] = cspace
         return new_status
 
