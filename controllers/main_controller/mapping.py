@@ -101,15 +101,17 @@ class Mapping(Behaviour):
             v = int(self.prob_map[coord[0]][coord[1]]*255)
             color = v*256**2+v*256+v
             draw_pixel(self.display, coord[0],coord[1], color)
-
+    
     def terminate(self,new_status):
         self.logger.debug(f"Mapping::terminate {self.name}")
         if self.hasrun:
             kernel = np.ones((55,55))
             cmap = signal.convolve2d(self.prob_map,kernel,mode='same')
             cspace = cmap>0.9
+            np.save(self.filepath,cspace)
             self.blackboard['cspace'] = cspace
         return new_status
+
     
 class DoesMapExist(Behaviour):
     def __init__(self,name,blackboard):

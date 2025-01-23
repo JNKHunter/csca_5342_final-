@@ -607,11 +607,6 @@ CeilingLight {
   pointLightIntensity 4
 }
 Chair {
-  translation -0.64 -0.5 0
-  rotation 0 0 1 -1.5707953071795862
-  name "chair(1)"
-}
-Chair {
   translation -0.64 -2.33 0
   rotation 0 0 -1 -1.5707953071795862
   name "chair(2)"
@@ -1390,7 +1385,7 @@ Robot {
                                                   ]
                                                   endPoint DEF ARM_4 Solid {
                                                     translation -0.02 -0.027 -0.222
-                                                    rotation -0.5773502691896257 -0.5773502691896261 -0.5773502691896256 2.0943999999999963
+                                                    rotation -0.5773502691896256 -0.577350269189626 -0.5773502691896255 2.0943999999999963
                                                     children [
                                                       DEF ARM_4_SH1 Shape {
                                                         appearance PBRAppearance {
@@ -5132,7 +5127,7 @@ Robot {
             }
             endPoint DEF SMALL_WHEEL Solid {
               translation -0.016 0 -0.04
-              rotation -1 -7.065403087751576e-16 -2.3551343625838587e-16 1.5707999999999969
+              rotation -1 -7.8504478752795295e-16 -1.5700895750559056e-16 1.5707999999999966
               children [
                 DEF SMALL_WHEEL_SHAPE Shape {
                   appearance PBRAppearance {
@@ -5250,7 +5245,7 @@ Robot {
             }
             endPoint DEF SMALL_WHEEL Solid {
               translation -0.016 0 -0.04
-              rotation -1 -4.710268725167731e-16 1.5700895750559103e-16 1.5707999999999913
+              rotation -1 -5.887835906459664e-16 1.177567181291933e-16 1.5707999999999909
               children [
                 DEF SMALL_WHEEL_SHAPE Shape {
                   appearance PBRAppearance {
@@ -5368,7 +5363,7 @@ Robot {
             }
             endPoint DEF SMALL_WHEEL_JOINT Solid {
               translation -0.016 0 -0.04
-              rotation -1 -1.177567181291934e-15 1.5700895750559115e-16 1.570799999999989
+              rotation -1 -1.1873802411360332e-15 1.5700895750559118e-16 1.5707999999999893
               children [
                 DEF SMALL_WHEEL_SHAPE Shape {
                   appearance PBRAppearance {
@@ -5486,7 +5481,7 @@ Robot {
             }
             endPoint DEF SMALL_WHEEL Solid {
               translation -0.016 0 -0.04
-              rotation -1 -1.2560716600447274e-15 3.1401791501118186e-16 1.5707999999999924
+              rotation -1 -1.2536183950837024e-15 3.11564650050157e-16 1.5707999999999922
               children [
                 DEF SMALL_WHEEL_SHAPE Shape {
                   appearance PBRAppearance {
