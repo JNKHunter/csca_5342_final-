@@ -11,6 +11,7 @@ from servoarm import ServoArm
 from mapping import Mapping, DoesMapExist
 from navigation import Navigation
 from planning import Planning
+from planning_bfs import PlanningBFS
 from object_manipulation import DetectJamJar
 
 # create the Robot instance.
@@ -126,9 +127,8 @@ tree = Sequence('Main', children = [
             Navigation("move around the table", blackboard) 
         ])		
     ],memory=True),
+	PlanningBFS("Compute Path to Jar 1",blackboard,(0.91,-0.20)),
 	Navigation('Move robot to Jar 1',blackboard)
-	#Planning("Compute Path to Jar 1",blackboard,(0.579595,-0.438631)),
-	#Navigation('Move robot to Jar 1',blackboard)
 ],memory=True)
 
 tree.setup_with_descendants()
