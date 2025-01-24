@@ -15,11 +15,10 @@ def get_sensor_name_for_joint(joint_name):
     return sensor_name
 
 class ServoArm(py_trees.behaviour.Behaviour):
-    def __init__(self, name, joint_targets, blackboard, threshold=0.001):
+    def __init__(self, name, blackboard, threshold=0.001):
         super(ServoArm, self).__init__(name=f'ServoArm:{name}')
         self.blackboard = blackboard
         self.robot = blackboard.get('robot')
-        self.joint_targets = joint_targets
         self.timestep = blackboard.get('timestep')
         self.threshold = threshold
         self.motors = {}

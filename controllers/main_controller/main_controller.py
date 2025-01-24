@@ -59,7 +59,24 @@ safety = {
     'head_2_joint':0
 }
 
+reach = {
+    'torso_lift_joint' : 0.35,
+    'arm_1_joint' : 1.68,
+    'arm_2_joint' : -0.03,
+    'arm_3_joint' : -1.76,
+    'arm_4_joint' : 0.093,
+    'arm_5_joint' : 0,
+    'arm_6_joint' : 0,
+    'arm_7_joint' : 0,
+    'gripper_left_finger_joint' : 0.05,
+    'gripper_right_finger_joint': 0.05,
+    'head_1_joint':0,
+    'head_2_joint':0	
+}
+
 blackboard['waypoints'] = mapping_waypoints
+blackboard['joint_targets'] = safety
+
 
 '''
 The behavior tree declaration.
@@ -98,8 +115,9 @@ tree = Sequence("Main", children = [
 '''
 
 tree = Sequence('Main', children = [
-	DetectJamJar('Detect Jars', blackboard),
-    ServoArm('Move arm to Jar 1', blackboard.get('joint_targets'), blackboard)
+	ServoArm('Move arm to safety',blackboard),
+    DetectJamJar('Detect Jars', blackboard),
+    ServoArm('Move arm to Jar 1', blackboard)
 ],memory=True)
 
 tree.setup_with_descendants()
