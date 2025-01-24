@@ -11,6 +11,7 @@ from servoarm import ServoArm
 from mapping import Mapping, DoesMapExist
 from navigation import Navigation
 from planning import Planning
+from object_manipulation import DetectJamJar
 
 # create the Robot instance.
 robot = Supervisor()
@@ -79,6 +80,7 @@ Navigation
 Tha Navigation class is also pretty standard. The navigation routine takes as input an array of waypoints, and uses those waypoints to guide the robot on a path from start to goal nodes.
 '''
 
+'''
 tree = Sequence("Main", children = [
 	ServoArm('Move arm to safety',safety,blackboard),
 	Selector('Does map exist?', children=[
@@ -93,8 +95,12 @@ tree = Sequence("Main", children = [
     Planning("compute path to sink",blackboard,(0.01, 0.01)), 
     Navigation("move to sink",blackboard)
 ],memory=True)
+'''
 
-
+tree = Sequence('Main', children = [
+	DetectJamJar('Detect Jars', blackboard),
+    ServoArm('Move arm to Jar 1', blackboard.get('joint_targets'), blackboard)
+],memory=True)
 
 tree.setup_with_descendants()
 log_tree.level = log_tree.Level.DEBUG

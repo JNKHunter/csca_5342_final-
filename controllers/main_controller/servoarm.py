@@ -17,23 +17,27 @@ def get_sensor_name_for_joint(joint_name):
 class ServoArm(py_trees.behaviour.Behaviour):
     def __init__(self, name, joint_targets, blackboard, threshold=0.001):
         super(ServoArm, self).__init__(name=f'ServoArm:{name}')
+        self.blackboard = blackboard
         self.robot = blackboard.get('robot')
         self.joint_targets = joint_targets
-        print(joint_targets)
         self.timestep = blackboard.get('timestep')
         self.threshold = threshold
         self.motors = {}
         self.encoders = {}
 
-        # Initialize motors and encoders for each joint
-        for joint_name, target_position in self.joint_targets.items():
-            motor = self.robot.getDevice(joint_name)
-            encoder = self.robot.getDevice(get_sensor_name_for_joint(joint_name))
-            encoder.enable(blackboard.get('timestep'))
-            self.motors[joint_name] = motor
-            self.encoders[joint_name] = encoder
+        self.has_run = False
 
     def update(self):
+        if not self.has_run:
+            self.joint_targets = self.blackboard.get('joint_targets')
+            for joint_name, target_position in self.joint_targets.items():
+                motor = self.robot.getDevice(joint_name)
+                encoder = self.robot.getDevice(get_sensor_name_for_joint(joint_name))
+                encoder.enable(self.blackboard.get('timestep'))
+                self.motors[joint_name] = motor
+                self.encoders[joint_name] = encoder
+            self.has_run = True
+
         total_squared_error = 0.0
 
         # Calculate the cumulative squared error for all joints
