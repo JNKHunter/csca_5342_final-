@@ -68,8 +68,8 @@ reach = {
     'arm_5_joint' : 0,
     'arm_6_joint' : 0,
     'arm_7_joint' : 0,
-    'gripper_left_finger_joint' : 0.05,
-    'gripper_right_finger_joint': 0.05,
+    'gripper_left_finger_joint' : 0.045,
+    'gripper_right_finger_joint': 0.045,
     'head_1_joint':0,
     'head_2_joint':0	
 }
@@ -115,9 +115,9 @@ tree = Sequence("Main", children = [
 '''
 
 tree = Sequence('Main', children = [
-	ServoArm('Move arm to safety',blackboard),
-    DetectJamJar('Detect Jars', blackboard),
-    ServoArm('Move arm to Jar 1', blackboard)
+	#ServoArm('Move arm to safety',safety,blackboard),
+    #DetectJamJar('Detect Jars', blackboard),
+    ServoArm('Move arm to Jar 1', reach, blackboard)
 ],memory=True)
 
 tree.setup_with_descendants()
