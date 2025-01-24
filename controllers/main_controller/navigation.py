@@ -45,8 +45,8 @@ class Navigation(Behaviour):
         self.marker = self.robot.getFromDef('marker').getField('translation')
 
     def update(self):
+        print(f'index:{self.index} of {len(self.waypoints)}')
         if self.index == len(self.waypoints):
-            print("GOAL REACHED")
             self.leftspeed = 0
             self.rightspeed = 0
             self.leftmotor.setVelocity(self.leftspeed)

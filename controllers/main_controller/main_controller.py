@@ -127,7 +127,7 @@ tree = Sequence('Main', children = [
             Navigation("move around the table", blackboard) 
         ])		
     ],memory=True),
-	PlanningBFS("Compute Path to Jar 1",blackboard,(0.91,-0.20)),
+	PlanningBFS("Compute Path to Jar 1",blackboard,(0.85,-0.26)),
 	Navigation('Move robot to Jar 1',blackboard)
 ],memory=True)
 
