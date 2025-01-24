@@ -18,6 +18,7 @@ robot = Supervisor()
 
 #The mapping  waypoints.
 mapping_waypoints = [(0.595, -0.544), (0.595,-2.58), (-0.621, -3.3),(-1.72, -2.46),(-1.72, -2.16),(-1.72, -1.96), (-1.72, -0.431),(-0.416, 0.428),(-1.24, 0.0458),(-1.59, -0.305),(-1.67, -0.651),(-1.67, -1.049),(-1.67, -2.46),(-0.621, -3.3), (0.595, -2.58),(0.595, -0.544),(-0.207,0.263),(-0.207,0.263)]
+jar1_waypoints = [(0.604,-0.411)]
 
 # Used to store global state
 blackboard = {}
@@ -60,7 +61,7 @@ safety = {
 }
 
 reach = {
-    'torso_lift_joint' : 0.35,
+    'torso_lift_joint' : 0.276,
     'arm_1_joint' : 1.68,
     'arm_2_joint' : -0.03,
     'arm_3_joint' : -1.76,
@@ -74,7 +75,7 @@ reach = {
     'head_2_joint':0	
 }
 
-blackboard['waypoints'] = mapping_waypoints
+blackboard['waypoints'] = jar1_waypoints
 blackboard['joint_targets'] = safety
 
 
@@ -117,7 +118,17 @@ tree = Sequence("Main", children = [
 tree = Sequence('Main', children = [
 	#ServoArm('Move arm to safety',safety,blackboard),
     #DetectJamJar('Detect Jars', blackboard),
-    ServoArm('Move arm to Jar 1', reach, blackboard)
+    ServoArm('Move arm to Jar 1', reach, blackboard),
+		Selector('Does map exist?', children=[
+        DoesMapExist('Check for saved map',blackboard),
+        Parallel("Mapping",ParallelPolicy.SuccessOnOne(), children=[
+            Mapping("map the environment", blackboard),
+            Navigation("move around the table", blackboard) 
+        ])		
+    ],memory=True),
+	Navigation('Move robot to Jar 1',blackboard)
+	#Planning("Compute Path to Jar 1",blackboard,(0.579595,-0.438631)),
+	#Navigation('Move robot to Jar 1',blackboard)
 ],memory=True)
 
 tree.setup_with_descendants()

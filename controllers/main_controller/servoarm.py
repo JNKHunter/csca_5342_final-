@@ -41,7 +41,8 @@ class ServoArm(py_trees.behaviour.Behaviour):
             current_position = self.encoders[joint_name].getValue()
             error = target_position - current_position
             total_squared_error += error ** 2
-
+            if joint_name == 'torso_lift_joint':
+                print(f'torso: {current_position}')
             # Set the motor position to move closer to the target
             self.motors[joint_name].setPosition(target_position)
 
