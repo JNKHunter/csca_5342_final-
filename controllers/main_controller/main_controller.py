@@ -177,29 +177,33 @@ tree = Sequence('Main', children = [
             Navigation("move around the table", blackboard) 
         ])		
     ],memory=True),
-	PlanningSimple("Path to Jar 1",jar1_waypoints,blackboard),
-	Navigation('Move robot to Jar 1',blackboard),
-    ServoArm('Grip Jar 1',close_grip,blackboard),
-	ServoArm('Bend Arm',bend,blackboard),
-    PlanningSimple("Path to place Jar 1", [(0.38,-0.583)],blackboard),
-	Navigation('Move robot to place Jar 1',blackboard),
-	ServoArm('Move arm to place Jar 1', reach_maintain_grip, blackboard),
-	ServoArm('Release Jar 1', open_grip, blackboard),
-	ServoArm('Bend Arm',bend,blackboard),
-	PlanningSimple('Plan turn towards Jar 2', [(0.707,0.0141)],blackboard),
-	Navigation('Turn to Jar 2',blackboard),
-	ServoArm('Move arm to Jar 2', reach, blackboard),
-	PlanningSimple('Path towards Jar 2', [(1.09,0.22)],blackboard),
-	Navigation('move robot to Jar 2',blackboard),
-	ServoArm('Grip Jar 2',close_grip,blackboard),
-	ServoArm('Bend Arm',bend,blackboard),
-	Turn180Degrees('Turn 180 jar 2',blackboard),
-	ServoArm('Move arm to place Jar 2', reach_maintain_grip, blackboard),
-	PlanningSimple('Path towards Jar 2', [(0.208,-0.212)],blackboard),
-	Navigation('move robot to place Jar 2',blackboard),
-    ServoArm('Release Jar 2', open_grip, blackboard)
-	
-	#TODO: Tweak movement to jar 2
+	Sequence('Place all 3 jars', children = [
+		Sequence('Jar 1', children = [
+            PlanningSimple("Path to Jar 1",jar1_waypoints,blackboard),
+            Navigation('Move robot to Jar 1',blackboard),
+            ServoArm('Grip Jar 1',close_grip,blackboard),
+            ServoArm('Bend Arm',bend,blackboard),
+            PlanningSimple("Path to place Jar 1", [(0.38,-0.583)],blackboard),
+            Navigation('Move robot to place Jar 1',blackboard),
+            ServoArm('Move arm to place Jar 1', reach_maintain_grip, blackboard),
+            ServoArm('Release Jar 1', open_grip, blackboard)			
+        ],memory=True),
+		Sequence('Jar 2', children = [
+            ServoArm('Bend Arm',bend,blackboard),
+            PlanningSimple('Plan turn towards Jar 2', [(0.707,0.0141)],blackboard),
+            Navigation('Turn to Jar 2',blackboard),
+            ServoArm('Move arm to Jar 2', reach, blackboard),
+            PlanningSimple('Path towards Jar 2', [(1.09,0.22)],blackboard),
+            Navigation('move robot to Jar 2',blackboard),
+            ServoArm('Grip Jar 2',close_grip,blackboard),
+            ServoArm('Bend Arm',bend,blackboard),
+            Turn180Degrees('Turn 180 jar 2',blackboard),
+            ServoArm('Move arm to place Jar 2', reach_maintain_grip, blackboard),
+            PlanningSimple('Path towards Jar 2', [(0.208,-0.212)],blackboard),
+            Navigation('move robot to place Jar 2',blackboard),
+            ServoArm('Release Jar 2', open_grip, blackboard)			
+        ],memory=True)
+    ],memory=True)
 ],memory=True)
 
 tree.setup_with_descendants()
