@@ -202,10 +202,19 @@ tree = Sequence('Main', children = [
             PlanningSimple('Path towards Jar 2', [(0.208,-0.212)],blackboard),
             Navigation('move robot to place Jar 2',blackboard),
             ServoArm('Release Jar 2', open_grip, blackboard)			
+        ],memory=True),
+		Sequence('Jar 3', children = [
+            ServoArm('Bend Arm',bend,blackboard),
+			ServoArm('Bend Arm',safety,blackboard),
+            Turn180Degrees('Turn 180 jar 2',blackboard),
+			ServoArm('Reach for jar 3',reach,blackboard),
+			PlanningSimple('Path towards Jar 3', [(0.743,0.466),(0.952,0.489)],blackboard),
+			#0.83,.448
+			Navigation('Move robot to Jar 3',blackboard)
         ],memory=True)
     ],memory=True)
 ],memory=True)
-
+#TODO after turn 180 for jar 3, the robot seems unstable
 tree.setup_with_descendants()
 log_tree.level = log_tree.Level.DEBUG
 
