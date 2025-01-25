@@ -37,7 +37,7 @@ class Navigation(Behaviour):
         rotation_field = robot_node.getField("rotation")
 
         new_rotation = [0, 0, 1, 0]
-        rotation_field.setSFRotation(new_rotation)
+        #rotation_field.setSFRotation(new_rotation)
 
         self.index = 0 
         self.has_run = False 
@@ -45,8 +45,8 @@ class Navigation(Behaviour):
         self.marker = self.robot.getFromDef('marker').getField('translation')
 
     def update(self):
+        print(f'index:{self.index} of {len(self.waypoints)}')
         if self.index == len(self.waypoints):
-            print("GOAL REACHED")
             self.leftspeed = 0
             self.rightspeed = 0
             self.leftmotor.setVelocity(self.leftspeed)
@@ -55,10 +55,10 @@ class Navigation(Behaviour):
             return Status.SUCCESS
 
         if not self.has_run:
-            robot_node = self.robot.getSelf()  # Use getFromDef("ROBOT_NAME") if not the Supervisor
-            rotation_field = robot_node.getField("rotation")
-            new_rotation = [0, 0, 1, 0]
-            rotation_field.setSFRotation(new_rotation)
+            #robot_node = self.robot.getSelf()  # Use getFromDef("ROBOT_NAME") if not the Supervisor
+            #rotation_field = robot_node.getField("rotation")
+            #new_rotation = [0, 0, 1, 0]
+            #rotation_field.setSFRotation(new_rotation)
             self.has_run = True
 
         self.logger.debug(f"Navigation::update {self.name}")

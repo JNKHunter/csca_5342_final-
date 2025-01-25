@@ -46,8 +46,8 @@ WorldInfo {
 }
 Viewpoint {
   fieldOfView 1.1
-  orientation -0.4369215115514362 0.19932528375882536 0.8771368331099043 2.083395322325014
-  position 1.3466216753429427 -3.472885842010144 4.768231868671341
+  orientation -0.137980909838004 0.9902212776758859 -0.02056914578228169 0.9440957096826235
+  position -2.574120729479964 0.06172471962258691 6.226871545812548
   exposure 0.7999999999999999
 }
 TexturedBackground {
@@ -878,7 +878,7 @@ BiscuitBox {
   rotation 0 0 1 -0.262068
 }
 Robot {
-  translation 0 0 0.095
+  translation 0 0.18 0.095
   children [
     Compass {
     }
@@ -1023,18 +1023,9 @@ Robot {
                 }
               ]
               endPoint DEF TORSO_LIFT Solid {
-                translation 0 0 0.6
+                translation 0 0 0.6000000000000001
                 rotation 0.9273089253913606 0.09850094807618788 0.3611034756376796 0
                 children [
-                  DEF ARM_RIGHT_EXTENSION Pose {
-                    translation 0.05 0 0
-                    rotation 0 0 1 3.1416
-                    children [
-                      Slot {
-                        type "tiago right arm"
-                      }
-                    ]
-                  }
                   DEF ARM_FRONT_EXTENSION Pose {
                     translation -0.037 0.0388 0.0224
                     rotation 0 0 1 -1.5708
@@ -1100,8 +1091,8 @@ Robot {
                                   }
                                 ]
                                 endPoint DEF ARM_1 Solid {
-                                  translation 0.025099999999999983 0.194 -0.171
-                                  rotation 0 0 1 0.009999999999068417
+                                  translation 0.025099999999999914 0.194 -0.171
+                                  rotation 0 0 0.9999999999999999 0.009999999999157237
                                   children [
                                     DEF ARM_1_SH1 Shape {
                                       appearance PBRAppearance {
@@ -1219,7 +1210,7 @@ Robot {
                                       ]
                                       endPoint DEF ARM_2 Solid {
                                         translation 0.125 0.018 -0.031
-                                        rotation 1 -1.3738283781739197e-15 -1.471958976614914e-17 1.5707999999999935
+                                        rotation 1 -1.4891318313420939e-15 -3.4345709454348137e-17 1.5707999999999855
                                         children [
                                           DEF ARM_2_SH1 Shape {
                                             appearance PBRAppearance {
@@ -1269,7 +1260,7 @@ Robot {
                                             ]
                                             endPoint DEF ARM_3 Solid {
                                               translation 0.0872 0 -0.0015
-                                              rotation -0.577416935887097 -0.5773169329539687 0.5773169329539702 2.0944599999999953
+                                              rotation -0.577416935887099 -0.5773169329539688 0.5773169329539684 2.094459999999984
                                               children [
                                                 DEF ARM_3_SH1 Shape {
                                                   appearance PBRAppearance {
@@ -1385,7 +1376,7 @@ Robot {
                                                   ]
                                                   endPoint DEF ARM_4 Solid {
                                                     translation -0.02 -0.027 -0.222
-                                                    rotation -0.5773502691896256 -0.577350269189626 -0.5773502691896255 2.0943999999999963
+                                                    rotation -0.5773502691896262 -0.5773502691896262 -0.5773502691896248 2.0943999999999874
                                                     children [
                                                       DEF ARM_4_SH1 Shape {
                                                         appearance PBRAppearance {
@@ -1501,7 +1492,7 @@ Robot {
                                                         ]
                                                         endPoint DEF ARM_5 Solid {
                                                           translation -0.162 0.02 0.027
-                                                          rotation 3.495902569460422e-17 -1 -4.293213681793502e-18 1.5707999999999922
+                                                          rotation 3.925134096393657e-17 -1 -1.9626344291314264e-17 1.570799999999985
                                                           children [
                                                             DEF ARM_5_SH1 Shape {
                                                               appearance PBRAppearance {
@@ -1558,7 +1549,7 @@ Robot {
                                                               ]
                                                               endPoint DEF ARM_6 Solid {
                                                                 translation 0 0 0.15
-                                                                rotation -0.5773502691896255 -0.5773502691896262 -0.5773502691896254 2.0943999999999976
+                                                                rotation -0.5773502691896275 -0.5773502691896265 -0.5773502691896234 2.094399999999975
                                                                 children [
                                                                   DEF ARM_6_SH1 Shape {
                                                                     appearance PBRAppearance {
@@ -1612,8 +1603,8 @@ Robot {
                                                                       }
                                                                     ]
                                                                     endPoint DEF WRIST Solid {
-                                                                      translation 0.05499999999999979 0 0
-                                                                      rotation 0.5773502691679594 0.5773502692329573 0.5773502691679606 2.0943999999349874
+                                                                      translation 0.054999999999999334 0 0
+                                                                      rotation 0.5773502691695863 0.5773502692297048 0.5773502691695864 2.0943999999398324
                                                                       children [
                                                                         Pose {
                                                                           rotation 1 0 0 1.570796
@@ -4191,7 +4182,7 @@ Robot {
                           ]
                           endPoint DEF HEAD Solid {
                             translation 0.005 0 0.098
-                            rotation 1 -4.858457704485437e-10 4.858471835291612e-10 1.5707999999999944
+                            rotation 1 -4.858457704488455e-10 4.858471835287518e-10 1.5707999999999853
                             children [
                               DEF CAMERA Pose {
                                 translation 0.107 0.0802 0
@@ -4887,7 +4878,7 @@ Robot {
       ]
       endPoint DEF RIGHT_WHEEL Solid {
         translation 0 -0.202 0
-        rotation 1 2.2844879696736857e-10 -2.28449634061682e-10 1.5707999999999938
+        rotation 1 2.284482981232516e-10 -2.284497406430487e-10 1.5707999999999838
         children [
           DEF BIG_WHEEL Group {
             children [
@@ -5005,7 +4996,7 @@ Robot {
       ]
       endPoint DEF LEFT_WHEEL Solid {
         translation 0 0.202 0
-        rotation 1 -1.9872687536371608e-10 1.9872776835216193e-10 1.5707999999999946
+        rotation 1 -1.9872765059544467e-10 1.9872757209096592e-10 1.5707999999999853
         children [
           Pose {
             rotation -1 0 0 3.141593
@@ -5127,7 +5118,7 @@ Robot {
             }
             endPoint DEF SMALL_WHEEL Solid {
               translation -0.016 0 -0.04
-              rotation -1 -7.8504478752795295e-16 -1.5700895750559056e-16 1.5707999999999966
+              rotation -1 -4.710268725167746e-15 2.3551343625838725e-16 1.5707999999999847
               children [
                 DEF SMALL_WHEEL_SHAPE Shape {
                   appearance PBRAppearance {
@@ -5245,7 +5236,7 @@ Robot {
             }
             endPoint DEF SMALL_WHEEL Solid {
               translation -0.016 0 -0.04
-              rotation -1 -5.887835906459664e-16 1.177567181291933e-16 1.5707999999999909
+              rotation -1 -1.962611968819901e-15 2.3551343625838813e-16 1.570799999999977
               children [
                 DEF SMALL_WHEEL_SHAPE Shape {
                   appearance PBRAppearance {
@@ -5363,7 +5354,7 @@ Robot {
             }
             endPoint DEF SMALL_WHEEL_JOINT Solid {
               translation -0.016 0 -0.04
-              rotation -1 -1.1873802411360332e-15 1.5700895750559118e-16 1.5707999999999893
+              rotation -1 -1.570089575055918e-15 -3.140179150111835e-16 1.5707999999999818
               children [
                 DEF SMALL_WHEEL_SHAPE Shape {
                   appearance PBRAppearance {
@@ -5481,7 +5472,7 @@ Robot {
             }
             endPoint DEF SMALL_WHEEL Solid {
               translation -0.016 0 -0.04
-              rotation -1 -1.2536183950837024e-15 3.11564650050157e-16 1.5707999999999922
+              rotation -1 1.5700895750559192e-16 1.4130806175503277e-15 1.5707999999999795
               children [
                 DEF SMALL_WHEEL_SHAPE Shape {
                   appearance PBRAppearance {
