@@ -15,6 +15,7 @@ from planning_bfs import PlanningBFS
 from planning_simple import PlanningSimple
 from object_manipulation import DetectJamJar
 from turn_degrees import TurnDegrees
+from drive_backward import DriveBackward
 # create the Robot instance.
 robot = Supervisor()
 
@@ -84,6 +85,10 @@ lift_torso = {
     'torso_lift_joint' : 0.35	
 }
 
+drop_torso = {
+	'torso_lift_joint' : 0.20
+}
+
 
 prep_release = {
 	'torso_lift_joint' : 0.20,
@@ -113,7 +118,7 @@ bend = {
 }
 
 bend_left = {
-    'arm_1_joint' : 2.6,
+    'arm_1_joint' : 1.5,
     'arm_2_joint' : 0.004,
     'arm_3_joint' : -1.592,
     'arm_4_joint' : 1.524,
@@ -222,13 +227,14 @@ tree = Sequence('Main', children = [
 			PlanningSimple('Path towards Jar 3', [(1.27,0.165)],blackboard),
 			Navigation('Move robot to Jar 3',blackboard),
 			ServoArm('Grip Jar 3',close_grip,blackboard),
-			ServoArm('Lift',lift_torso,blackboard),
-            TurnDegrees('Turn 180 to place jar 3',blackboard,180),
-			ServoArm('Move arm to place Jar 3',reach,blackboard),
-			PlanningSimple('Path towards Jar 3', [(0.349,-0.259)],blackboard),
+			ServoArm('Bend Arm',bend_left,blackboard),
+            TurnDegrees('Turn to place jar 3',blackboard,180),
+			PlanningSimple('Path towards place Jar 3', [(0.117,-0.188)],blackboard),
 			Navigation('Move robot to Jar 3',blackboard),
+			ServoArm('Move arm to place Jar 3',reach_maintain_grip,blackboard),
 			ServoArm('Prep Release Jar 3', prep_release, blackboard),
-			ServoArm('Release Jar 3', open_grip, blackboard)
+			ServoArm('Release Jar 3', open_grip, blackboard),
+			ServoArm('Lift torso', lift_torso, blackboard)
         ],memory=True)
     ],memory=True)
 ],memory=True)
