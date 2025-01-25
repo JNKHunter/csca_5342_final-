@@ -16,6 +16,7 @@ from planning_simple import PlanningSimple
 from object_manipulation import DetectJamJar
 from turn_degrees import TurnDegrees
 from drive_backward import DriveBackward
+from init_object_manip import InitObjectManip
 # create the Robot instance.
 robot = Supervisor()
 
@@ -140,7 +141,7 @@ open_grip = {
     'gripper_right_finger_joint': 0.045
 }
 
-blackboard['waypoints'] = jar1_waypoints
+blackboard['waypoints'] = mapping_waypoints
 blackboard['joint_targets'] = safety
 
 
@@ -183,16 +184,25 @@ tree = Sequence("Main", children = [
 tree = Sequence('Main', children = [
 	#ServoArm('Move arm to safety',safety,blackboard),
     #DetectJamJar('Detect Jars', blackboard),
-    ServoArm('Move arm to Jar 1', reach, blackboard),
-		Selector('Does map exist?', children=[
+    ServoArm('Move arm to safety', safety, blackboard),
+	Selector('Does map exist?', children=[
         DoesMapExist('Check for saved map',blackboard),
         Parallel("Mapping",ParallelPolicy.SuccessOnOne(), children=[
             Mapping("map the environment", blackboard),
             Navigation("move around the table", blackboard) 
         ])		
     ],memory=True),
+	Sequence('Navigate room', children = [
+	    PlanningBFS("compute path to lower left corner",blackboard,(-1.33,-3.01)),
+        #Planning("compute path to lower left corner",blackboard,(0.894,-0.163)),
+        Navigation("move to the lower left ocrner",blackboard),
+        PlanningBFS("compute path to sink",blackboard,(0.0, 0.18)), 
+        Navigation("move to sink",blackboard)
+    ],memory=True),
 	Sequence('Place all 3 jars', children = [
+		InitObjectManip('Start object manipulation sequence',blackboard),
 		Sequence('Jar 1', children = [
+            ServoArm('Move arm to Jar 1',reach,blackboard),
             PlanningSimple("Path to Jar 1",jar1_waypoints,blackboard),
             Navigation('Move robot to Jar 1',blackboard),
             ServoArm('Grip Jar 1',close_grip,blackboard),
