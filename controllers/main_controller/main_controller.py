@@ -12,6 +12,7 @@ from mapping import Mapping, DoesMapExist
 from navigation import Navigation
 from planning import Planning
 from planning_bfs import PlanningBFS
+from planning_simple import PlanningSimple
 from object_manipulation import DetectJamJar
 
 # create the Robot instance.
@@ -19,7 +20,8 @@ robot = Supervisor()
 
 #The mapping  waypoints.
 mapping_waypoints = [(0.595, -0.544), (0.595,-2.58), (-0.621, -3.3),(-1.72, -2.46),(-1.72, -2.16),(-1.72, -1.96), (-1.72, -0.431),(-0.416, 0.428),(-1.24, 0.0458),(-1.59, -0.305),(-1.67, -0.651),(-1.67, -1.049),(-1.67, -2.46),(-0.621, -3.3), (0.595, -2.58),(0.595, -0.544),(-0.207,0.263),(-0.207,0.263)]
-jar1_waypoints = [(0.604,-0.411)]
+jar1_waypoints = [(0.957,-0.082)]
+
 
 # Used to store global state
 blackboard = {}
@@ -62,11 +64,11 @@ safety = {
 }
 
 reach = {
-    'torso_lift_joint' : 0.276,
+    'torso_lift_joint' : 0.26,
     'arm_1_joint' : 1.68,
     'arm_2_joint' : -0.03,
-    'arm_3_joint' : -1.76,
-    'arm_4_joint' : 0.093,
+    'arm_3_joint' : -1.6,
+    'arm_4_joint' : 0,
     'arm_5_joint' : 0,
     'arm_6_joint' : 0,
     'arm_7_joint' : 0,
@@ -74,6 +76,27 @@ reach = {
     'gripper_right_finger_joint': 0.045,
     'head_1_joint':0,
     'head_2_joint':0	
+}
+
+jar_1_bend = {
+    'torso_lift_joint' : 0.26,
+    'arm_1_joint' : 0.07,
+    'arm_2_joint' : 0.004,
+    'arm_3_joint' : -1.592,
+    'arm_4_joint' : 1.524,
+    'arm_5_joint' : 0,
+    'arm_6_joint' : 0,
+    'arm_7_joint' : 0,
+    'gripper_left_finger_joint' : 0.045,
+    'gripper_right_finger_joint': 0.045,
+    'head_1_joint':0,
+    'head_2_joint':0	
+}
+
+close_grip = {
+    'gripper_left_finger_joint' : 0.02,
+    'gripper_right_finger_joint': 0.02,
+    'torso_lift_joint' : 0.276   
 }
 
 blackboard['waypoints'] = jar1_waypoints
@@ -127,8 +150,9 @@ tree = Sequence('Main', children = [
             Navigation("move around the table", blackboard) 
         ])		
     ],memory=True),
-	PlanningBFS("Compute Path to Jar 1",blackboard,(0.85,-0.26)),
-	Navigation('Move robot to Jar 1',blackboard)
+	PlanningSimple("Path to Jar 1",jar1_waypoints,blackboard),
+	Navigation('Move robot to Jar 1',blackboard),
+    ServoArm('Grip Jar 1',close_grip,blackboard)
 ],memory=True)
 
 tree.setup_with_descendants()
