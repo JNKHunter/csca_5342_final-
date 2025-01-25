@@ -14,7 +14,7 @@ from planning import Planning
 from planning_bfs import PlanningBFS
 from planning_simple import PlanningSimple
 from object_manipulation import DetectJamJar
-
+from turn_180_degrees import Turn180Degrees
 # create the Robot instance.
 robot = Supervisor()
 
@@ -103,6 +103,18 @@ bend = {
     'head_2_joint':0	
 }
 
+bend_left = {
+    'arm_1_joint' : 2.6,
+    'arm_2_joint' : 0.004,
+    'arm_3_joint' : -1.592,
+    'arm_4_joint' : 1.524,
+    'arm_5_joint' : 0,
+    'arm_6_joint' : 0,
+    'arm_7_joint' : 0,
+    'head_1_joint':0,
+    'head_2_joint':0	
+}
+
 close_grip = {
     'gripper_left_finger_joint' : 0.035,
     'gripper_right_finger_joint': 0.035,
@@ -169,7 +181,7 @@ tree = Sequence('Main', children = [
 	Navigation('Move robot to Jar 1',blackboard),
     ServoArm('Grip Jar 1',close_grip,blackboard),
 	ServoArm('Bend Arm',bend,blackboard),
-    PlanningSimple("Path to place Jar 1", jar1_place_waypoints,blackboard),
+    PlanningSimple("Path to place Jar 1", [(0.38,-0.583)],blackboard),
 	Navigation('Move robot to place Jar 1',blackboard),
 	ServoArm('Move arm to place Jar 1', reach_maintain_grip, blackboard),
 	ServoArm('Release Jar 1', open_grip, blackboard),
@@ -178,7 +190,15 @@ tree = Sequence('Main', children = [
 	Navigation('Turn to Jar 2',blackboard),
 	ServoArm('Move arm to Jar 2', reach, blackboard),
 	PlanningSimple('Path towards Jar 2', [(1.09,0.22)],blackboard),
-	Navigation('move robot to Jar 2',blackboard)
+	Navigation('move robot to Jar 2',blackboard),
+	ServoArm('Grip Jar 2',close_grip,blackboard),
+	ServoArm('Bend Arm',bend,blackboard),
+	Turn180Degrees('Turn 180 jar 2',blackboard),
+	ServoArm('Move arm to place Jar 2', reach_maintain_grip, blackboard),
+	PlanningSimple('Path towards Jar 2', [(0.208,-0.212)],blackboard),
+	Navigation('move robot to place Jar 2',blackboard),
+    ServoArm('Release Jar 2', open_grip, blackboard)
+	
 	#TODO: Tweak movement to jar 2
 ],memory=True)
 
