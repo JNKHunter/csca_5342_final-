@@ -94,9 +94,9 @@ jar_1_bend = {
 }
 
 close_grip = {
-    'gripper_left_finger_joint' : 0.02,
-    'gripper_right_finger_joint': 0.02,
-    'torso_lift_joint' : 0.276   
+    'gripper_left_finger_joint' : 0.04,
+    'gripper_right_finger_joint': 0.04,
+    'torso_lift_joint' : 0.29   
 }
 
 blackboard['waypoints'] = jar1_waypoints
