@@ -80,6 +80,10 @@ reach = {
     'head_2_joint':0	
 }
 
+prep_release = {
+	'torso_lift_joint' : 0.20,
+}
+
 reach_maintain_grip = {
     'torso_lift_joint' : 0.26,
     'arm_1_joint' : 1.68,
@@ -201,14 +205,16 @@ tree = Sequence('Main', children = [
             ServoArm('Move arm to place Jar 2', reach_maintain_grip, blackboard),
             PlanningSimple('Path towards Jar 2', [(0.208,-0.212)],blackboard),
             Navigation('move robot to place Jar 2',blackboard),
+			ServoArm('Prep Release Jar 2', prep_release, blackboard),
             ServoArm('Release Jar 2', open_grip, blackboard)			
         ],memory=True),
 		Sequence('Jar 3', children = [
             ServoArm('Bend Arm',bend,blackboard),
 			ServoArm('Bend Arm',safety,blackboard),
             Turn180Degrees('Turn 180 jar 2',blackboard),
+			ServoArm('Bend Arm',bend,blackboard),
 			ServoArm('Reach for jar 3',reach,blackboard),
-			PlanningSimple('Path towards Jar 3', [(0.743,0.466),(0.952,0.489)],blackboard),
+			PlanningSimple('Path towards Jar 3', [(1.041,0.105)],blackboard),
 			#0.83,.448
 			Navigation('Move robot to Jar 3',blackboard)
         ],memory=True)
