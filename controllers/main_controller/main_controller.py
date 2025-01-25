@@ -22,6 +22,7 @@ robot = Supervisor()
 mapping_waypoints = [(0.595, -0.544), (0.595,-2.58), (-0.621, -3.3),(-1.72, -2.46),(-1.72, -2.16),(-1.72, -1.96), (-1.72, -0.431),(-0.416, 0.428),(-1.24, 0.0458),(-1.59, -0.305),(-1.67, -0.651),(-1.67, -1.049),(-1.67, -2.46),(-0.621, -3.3), (0.595, -2.58),(0.595, -0.544),(-0.207,0.263),(-0.207,0.263)]
 jar1_waypoints = [(0.957,-0.082)]
 jar1_place_waypoints = [(0.38,-0.583)]
+jar2_waypoints = [(1.14,0.466)]
 
 
 # Used to store global state
@@ -79,6 +80,17 @@ reach = {
     'head_2_joint':0	
 }
 
+reach_maintain_grip = {
+    'torso_lift_joint' : 0.26,
+    'arm_1_joint' : 1.68,
+    'arm_2_joint' : -0.03,
+    'arm_3_joint' : -1.6,
+    'arm_4_joint' : 0,
+    'arm_5_joint' : 0,
+    'arm_6_joint' : 0,
+    'arm_7_joint' : 0
+}
+
 bend = {
     'arm_1_joint' : 0.07,
     'arm_2_joint' : 0.004,
@@ -95,6 +107,11 @@ close_grip = {
     'gripper_left_finger_joint' : 0.035,
     'gripper_right_finger_joint': 0.035,
     'torso_lift_joint' : 0.35   
+}
+
+open_grip = {
+    'gripper_left_finger_joint' : 0.045,
+    'gripper_right_finger_joint': 0.045
 }
 
 blackboard['waypoints'] = jar1_waypoints
@@ -151,10 +168,18 @@ tree = Sequence('Main', children = [
 	PlanningSimple("Path to Jar 1",jar1_waypoints,blackboard),
 	Navigation('Move robot to Jar 1',blackboard),
     ServoArm('Grip Jar 1',close_grip,blackboard),
-	ServoArm('Grip Jar 1',bend,blackboard),
+	ServoArm('Bend Arm',bend,blackboard),
     PlanningSimple("Path to place Jar 1", jar1_place_waypoints,blackboard),
 	Navigation('Move robot to place Jar 1',blackboard),
-	ServoArm('Move arm to Jar 1', reach, blackboard)
+	ServoArm('Move arm to place Jar 1', reach_maintain_grip, blackboard),
+	ServoArm('Release Jar 1', open_grip, blackboard),
+	ServoArm('Bend Arm',bend,blackboard),
+	PlanningSimple('Plan turn towards Jar 2', [(0.707,0.0141)],blackboard),
+	Navigation('Turn to Jar 2',blackboard),
+	ServoArm('Move arm to Jar 2', reach, blackboard),
+	PlanningSimple('Path towards Jar 2', [(1.09,0.22)],blackboard),
+	Navigation('move robot to Jar 2',blackboard)
+	#TODO: Tweak movement to jar 2
 ],memory=True)
 
 tree.setup_with_descendants()
