@@ -24,5 +24,6 @@ class InitObjectManip(Behaviour):
             
             rotation_field.setSFRotation(new_rotation)
             self.has_run = True
+            self.robot.simulationResetPhysics()
             return Status.SUCCESS
         

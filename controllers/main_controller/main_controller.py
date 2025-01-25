@@ -90,6 +90,10 @@ drop_torso = {
 	'torso_lift_joint' : 0.20
 }
 
+zero_torso = {
+	'torso_lift_joint' : 0.0
+}
+
 
 prep_release = {
 	'torso_lift_joint' : 0.20,
@@ -201,6 +205,8 @@ tree = Sequence('Main', children = [
     ],memory=True),
 	Sequence('Place all 3 jars', children = [
 		InitObjectManip('Start object manipulation sequence',blackboard),
+		ServoArm('Lower Tiao',zero_torso,blackboard),
+        ServoArm('Bend Arm',bend,blackboard),
 		Sequence('Jar 1', children = [
             ServoArm('Move arm to Jar 1',reach,blackboard),
             PlanningSimple("Path to Jar 1",jar1_waypoints,blackboard),
