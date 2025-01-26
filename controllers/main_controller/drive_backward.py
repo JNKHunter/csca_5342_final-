@@ -20,7 +20,7 @@ class DriveBackward(Behaviour):
 
     def setup(self):
         self.timestep = self.blackboard.get('timestep')
-        self.max_speed = 6.28
+        self.max_speed = 3.14
         self.leftmotor = self.robot.getDevice('wheel_left_joint')
         self.rightmotor = self.robot.getDevice('wheel_right_joint')
 
@@ -58,19 +58,26 @@ class DriveBackward(Behaviour):
 
             # Get the robot's orientation from the compass
             compass_values = self.compass.getValues()
-            if compass_values[0] == 0 and compass_values[1] == 0:
+            if compass_values[0] == 0 and compass_values[2] == 0:
                 print("Compass values are zero, unable to compute orientation!")
                 return Status.FAILURE
 
-            heading = np.arctan2(compass_values[0], compass_values[1])
+            # Calculate the heading angle from the compass
+            heading = np.arctan2(compass_values[0], compass_values[2])
+
+            # Compute the direction vector for backward motion
+            direction = np.array([-np.sin(heading), -np.cos(heading)])
 
             # Compute the target position
-            direction = np.array([np.sin(heading), -np.cos(heading)])  # Backward direction
-            self.target_position = self.start_position + direction * (-self.distance)  # Negative distance for backward
+            self.target_position = self.start_position + direction * self.distance
+
+            print(f"Start Position: {self.start_position}")
+            print(f"Target Position: {self.target_position}")
+            print(f"Direction Vector: {direction}")
 
         # Compute the distance to the target position
         distance_to_target = np.linalg.norm(self.target_position - current_position)
-        print(f"Distance to target: {distance_to_target}")
+        print(f"Distance to target: {distance_to_target:.2f}")
 
         # Check if the target position is reached
         if distance_to_target < 0.05:  # Tolerance for stopping
@@ -84,3 +91,4 @@ class DriveBackward(Behaviour):
         self.rightmotor.setVelocity(-self.max_speed)
 
         return Status.RUNNING
+

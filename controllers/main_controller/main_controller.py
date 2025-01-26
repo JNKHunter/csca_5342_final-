@@ -17,6 +17,7 @@ from object_manipulation import DetectJamJar
 from turn_degrees import TurnDegrees
 from drive_backward import DriveBackward
 from init_object_manip import InitObjectManip
+from move_marker import MoveMarker
 # create the Robot instance.
 robot = Supervisor()
 
@@ -188,7 +189,6 @@ tree = Sequence("Main", children = [
 tree = Sequence('Main', children = [
 	#ServoArm('Move arm to safety',safety,blackboard),
     #DetectJamJar('Detect Jars', blackboard),
-    
     ServoArm('Move arm to safety', safety, blackboard),
 	Selector('Does map exist?', children=[
         DoesMapExist('Check for saved map',blackboard),
@@ -247,14 +247,15 @@ tree = Sequence('Main', children = [
             TurnDegrees('Turn towards jar 3',blackboard,135),
 			ServoArm('Bend Arm',bend,blackboard),
 			ServoArm('Reach for jar 3',reach,blackboard),
-            #1.27,0.0784
+            #1.27,0.0759
 			PlanningSimple('Path towards Jar 3', [(1.27,0.0784)],blackboard),
 			Navigation('Move robot to Jar 3',blackboard),
 			ServoArm('Grip Jar 3',close_grip,blackboard),
-			ServoArm('Bend Arm',bend_left,blackboard),
-            TurnDegrees('Turn to place jar 3',blackboard,180),
 			ServoArm('Bend Arm',bend,blackboard),
-			PlanningSimple('Path towards place Jar 3', [(0.117,-0.188)],blackboard),
+            MoveMarker('Move marker out of the way',blackboard),
+			DriveBackward('Drive backward', blackboard,0.10),
+            TurnDegrees('Turn to place jar 3',blackboard,180),
+			PlanningSimple('Path towards place Jar 3', [(0.199,-0.276)],blackboard),
 			Navigation('Move robot to Jar 3',blackboard),
 			ServoArm('Move arm to place Jar 3',reach_maintain_grip,blackboard),
 			ServoArm('Prep Release Jar 3', prep_release, blackboard),
@@ -263,6 +264,10 @@ tree = Sequence('Main', children = [
         ],memory=True)
     ],memory=True)
 ],memory=True)
+
+
+
+
 #TODO pick up jar 3
 tree.setup_with_descendants()
 log_tree.level = log_tree.Level.DEBUG
