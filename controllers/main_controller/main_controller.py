@@ -275,7 +275,7 @@ log_tree.level = log_tree.Level.DEBUG
 while robot.step(blackboard.get('timestep')) != -1:
 	tree.tick_once()
 	if tree.status == Status.SUCCESS:
-		print("All joints reached their target positions.")
+		print("Simulation complete!")
 		break
 	elif tree.status == Status.RUNNING:
-		print("Moving joints to target positions...")
+		print("Simulation running...")
