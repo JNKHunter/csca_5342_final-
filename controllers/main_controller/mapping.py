@@ -105,7 +105,7 @@ class Mapping(Behaviour):
     def terminate(self,new_status):
         self.logger.debug(f"Mapping::terminate {self.name}")
         if self.hasrun:
-            kernel = np.ones((55,55))
+            kernel = np.ones((65,65))
             cmap = signal.convolve2d(self.prob_map,kernel,mode='same')
             cspace = cmap>0.9
             np.save(self.filepath,cspace)
