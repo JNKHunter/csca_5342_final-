@@ -236,7 +236,8 @@ tree = Sequence('Main', children = [
             PlanningSimple('Path towards Jar 2', [(0.208,-0.212)],blackboard),
             Navigation('move robot to place Jar 2',blackboard),
 			ServoArm('Prep Release Jar 2', prep_release, blackboard),
-            ServoArm('Release Jar 2', open_grip, blackboard)			
+            ServoArm('Release Jar 2', open_grip, blackboard),
+			ServoArm('Lift torso', lift_torso, blackboard)			
         ],memory=True),
 		Sequence('Jar 3', children = [
             ServoArm('Bend Arm',bend,blackboard),
