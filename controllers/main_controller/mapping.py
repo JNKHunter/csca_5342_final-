@@ -108,7 +108,6 @@ class Mapping(Behaviour):
             kernel = np.ones((65,65))
             cmap = signal.convolve2d(self.prob_map,kernel,mode='same')
             cspace = cmap>0.9
-            np.save(self.filepath,cspace)
             self.blackboard['cspace'] = cspace
         return new_status
 

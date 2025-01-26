@@ -11,12 +11,12 @@ class DetectJamJar(Behaviour):
     def update(self):
         objects = self.camera.getRecognitionObjects()
         for obj in objects:
-            if 9103 == obj.getId():  # Replace with actual label if different
+            if 9103 == obj.getId(): 
                 self.logger.debug(f"DetectJamJar::update {self.name} found jam jar")
                 jam_jar_position = obj.getPosition()
                 joint_targets = {
-                    'arm_1_joint': jam_jar_position[0],  # Replace with IK computation
-                    'arm_2_joint': jam_jar_position[1],  # Replace with IK computation
+                    'arm_1_joint': jam_jar_position[0], 
+                    'arm_2_joint': jam_jar_position[1],
                 }
                 self.blackboard['joint_targets'] = joint_targets
                 print(joint_targets)

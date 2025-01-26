@@ -33,11 +33,8 @@ class Navigation(Behaviour):
         self.compass = self.robot.getDevice('compass')
         self.compass.enable(self.timestep) 
         
-        robot_node = self.robot.getSelf()  # Use getFromDef("ROBOT_NAME") if not the Supervisor
+        robot_node = self.robot.getSelf() 
         rotation_field = robot_node.getField("rotation")
-
-        new_rotation = [0, 0, 1, 0]
-        #rotation_field.setSFRotation(new_rotation)
 
         self.index = 0 
         self.has_run = False 
@@ -46,21 +43,16 @@ class Navigation(Behaviour):
 
     def update(self):
         print(f'Waypoint:{self.index} of {len(self.waypoints)}')
-        print('---- Some waypoints make take a minute. Thank you for your patience!! ----')
+        print('---- Sometimes the robot moves VERY slowly and certain waypoints make take a minute. Thank you for your patience!! ----')
         print('---- You can toggle the hide/show render button to speed up navigation!! ----')
         if self.index == len(self.waypoints):
             self.leftspeed = 0
             self.rightspeed = 0
             self.leftmotor.setVelocity(self.leftspeed)
             self.rightmotor.setVelocity(self.rightspeed)
-            #self.blackboard['num_navigations'] = self.blackboard.get('num_navigations') + 1
             return Status.SUCCESS
 
         if not self.has_run:
-            #robot_node = self.robot.getSelf()  # Use getFromDef("ROBOT_NAME") if not the Supervisor
-            #rotation_field = robot_node.getField("rotation")
-            #new_rotation = [0, 0, 1, 0]
-            #rotation_field.setSFRotation(new_rotation)
             self.robot.simulationResetPhysics()
             self.has_run = True
 

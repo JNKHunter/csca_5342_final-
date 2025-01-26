@@ -50,7 +50,7 @@ class DriveBackward(Behaviour):
             print("Invalid GPS values!")
             return Status.FAILURE
 
-        current_position = np.array([gps_values[0], gps_values[2]])  # X and Z (assuming XZ plane)
+        current_position = np.array([gps_values[0], gps_values[2]])
 
         # Initialize the starting position and target position
         if self.start_position is None:
