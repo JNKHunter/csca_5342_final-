@@ -188,6 +188,7 @@ tree = Sequence("Main", children = [
 tree = Sequence('Main', children = [
 	#ServoArm('Move arm to safety',safety,blackboard),
     #DetectJamJar('Detect Jars', blackboard),
+    
     ServoArm('Move arm to safety', safety, blackboard),
 	Selector('Does map exist?', children=[
         DoesMapExist('Check for saved map',blackboard),
@@ -203,7 +204,8 @@ tree = Sequence('Main', children = [
         PlanningBFS("compute path to sink",blackboard,(0.0, 0.18)), 
         Navigation("move to sink",blackboard)
     ],memory=True),
-	Sequence('Place all 3 jars', children = [
+	
+    Sequence('Place all 3 jars', children = [
 		InitObjectManip('Start object manipulation sequence',blackboard),
 		ServoArm('Lower Tiao',zero_torso,blackboard),
         ServoArm('Bend Arm',bend,blackboard),
@@ -223,7 +225,8 @@ tree = Sequence('Main', children = [
             PlanningSimple('Plan turn towards Jar 2', [(0.707,0.0141)],blackboard),
             Navigation('Turn to Jar 2',blackboard),
             ServoArm('Move arm to Jar 2', reach, blackboard),
-            PlanningSimple('Path towards Jar 2', [(1.09,0.22)],blackboard),
+            #PlanningSimple('Path towards Jar 2', [(1.09,0.22)],blackboard),
+			PlanningSimple('Path towards Jar 2', [(1.12,0.209)],blackboard),
             Navigation('move robot to Jar 2',blackboard),
             ServoArm('Grip Jar 2',close_grip,blackboard),
             ServoArm('Bend Arm',bend,blackboard),
