@@ -244,7 +244,7 @@ tree = Sequence('Main', children = [
             TurnDegrees('Turn towards jar 3',blackboard,135),
 			ServoArm('Bend Arm',bend,blackboard),
 			ServoArm('Reach for jar 3',reach,blackboard),
-			PlanningSimple('Path towards Jar 3', [(1.27,0.160)],blackboard),
+			PlanningSimple('Path towards Jar 3', [(1.26,0.172)],blackboard),
 			Navigation('Move robot to Jar 3',blackboard),
 			ServoArm('Grip Jar 3',close_grip,blackboard),
 			ServoArm('Bend Arm',bend_left,blackboard),
