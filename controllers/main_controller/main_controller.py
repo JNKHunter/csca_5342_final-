@@ -17,6 +17,7 @@ from object_manipulation import DetectJamJar
 from turn_degrees import TurnDegrees
 from drive_backward import DriveBackward
 from init_object_manip import InitObjectManip
+from move_marker import MoveMarker
 # create the Robot instance.
 robot = Supervisor()
 
@@ -203,7 +204,8 @@ tree = Sequence('Main', children = [
         PlanningBFS("compute path to sink",blackboard,(0.0, 0.18)), 
         Navigation("move to sink",blackboard)
     ],memory=True),
-	Sequence('Place all 3 jars', children = [
+	
+    Sequence('Place all 3 jars', children = [
 		InitObjectManip('Start object manipulation sequence',blackboard),
 		ServoArm('Lower Tiao',zero_torso,blackboard),
         ServoArm('Bend Arm',bend,blackboard),
@@ -216,14 +218,18 @@ tree = Sequence('Main', children = [
             PlanningSimple("Path to place Jar 1", [(0.38,-0.583)],blackboard),
             Navigation('Move robot to place Jar 1',blackboard),
             ServoArm('Move arm to place Jar 1', reach_maintain_grip, blackboard),
-            ServoArm('Release Jar 1', open_grip, blackboard)			
+			ServoArm('Prep Release Jar 1', prep_release, blackboard),
+            ServoArm('Release Jar 1', open_grip, blackboard),
+			ServoArm('Lift torso', lift_torso, blackboard)			
         ],memory=True),
 		Sequence('Jar 2', children = [
             ServoArm('Bend Arm',bend,blackboard),
             PlanningSimple('Plan turn towards Jar 2', [(0.707,0.0141)],blackboard),
             Navigation('Turn to Jar 2',blackboard),
             ServoArm('Move arm to Jar 2', reach, blackboard),
-            PlanningSimple('Path towards Jar 2', [(1.09,0.22)],blackboard),
+            #PlanningSimple('Path towards Jar 2', [(1.09,0.22)],blackboard),#original
+			PlanningSimple('Path towards Jar 2', [(1.10,0.215)],blackboard),
+            #PlanningSimple('Path towards Jar 2', [(1.12,0.209)],blackboard),#too far
             Navigation('move robot to Jar 2',blackboard),
             ServoArm('Grip Jar 2',close_grip,blackboard),
             ServoArm('Bend Arm',bend,blackboard),
@@ -232,7 +238,8 @@ tree = Sequence('Main', children = [
             PlanningSimple('Path towards Jar 2', [(0.208,-0.212)],blackboard),
             Navigation('move robot to place Jar 2',blackboard),
 			ServoArm('Prep Release Jar 2', prep_release, blackboard),
-            ServoArm('Release Jar 2', open_grip, blackboard)			
+            ServoArm('Release Jar 2', open_grip, blackboard),
+			ServoArm('Lift torso', lift_torso, blackboard)			
         ],memory=True),
 		Sequence('Jar 3', children = [
             ServoArm('Bend Arm',bend,blackboard),
@@ -240,12 +247,15 @@ tree = Sequence('Main', children = [
             TurnDegrees('Turn towards jar 3',blackboard,135),
 			ServoArm('Bend Arm',bend,blackboard),
 			ServoArm('Reach for jar 3',reach,blackboard),
-			PlanningSimple('Path towards Jar 3', [(1.27,0.165)],blackboard),
+            #1.27,0.0759
+			PlanningSimple('Path towards Jar 3', [(1.27,0.0784)],blackboard),
 			Navigation('Move robot to Jar 3',blackboard),
 			ServoArm('Grip Jar 3',close_grip,blackboard),
-			ServoArm('Bend Arm',bend_left,blackboard),
+			ServoArm('Bend Arm',bend,blackboard),
+            MoveMarker('Move marker out of the way',blackboard),
+			DriveBackward('Drive backward', blackboard,0.10),
             TurnDegrees('Turn to place jar 3',blackboard,180),
-			PlanningSimple('Path towards place Jar 3', [(0.117,-0.188)],blackboard),
+			PlanningSimple('Path towards place Jar 3', [(0.199,-0.276)],blackboard),
 			Navigation('Move robot to Jar 3',blackboard),
 			ServoArm('Move arm to place Jar 3',reach_maintain_grip,blackboard),
 			ServoArm('Prep Release Jar 3', prep_release, blackboard),
@@ -254,7 +264,11 @@ tree = Sequence('Main', children = [
         ],memory=True)
     ],memory=True)
 ],memory=True)
-#TODO after turn 180 for jar 3, the robot seems unstable
+
+
+
+
+#TODO pick up jar 3
 tree.setup_with_descendants()
 log_tree.level = log_tree.Level.DEBUG
 

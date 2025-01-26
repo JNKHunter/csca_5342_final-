@@ -59,6 +59,7 @@ class Navigation(Behaviour):
             #rotation_field = robot_node.getField("rotation")
             #new_rotation = [0, 0, 1, 0]
             #rotation_field.setSFRotation(new_rotation)
+            self.robot.simulationResetPhysics()
             self.has_run = True
 
         self.logger.debug(f"Navigation::update {self.name}")
