@@ -18,17 +18,14 @@ from turn_degrees import TurnDegrees
 from drive_backward import DriveBackward
 from init_object_manip import InitObjectManip
 from move_marker import MoveMarker
+
 # create the Robot instance.
 robot = Supervisor()
 
-#The mapping  waypoints.
+#The mapping waypoints.
 mapping_waypoints = [(0.595, -0.544), (0.595,-2.58), (-0.621, -3.3),(-1.72, -2.46),(-1.72, -2.16),(-1.72, -1.96), (-1.72, -0.431),(-0.416, 0.428),(-1.24, 0.0458),(-1.59, -0.305),(-1.67, -0.651),(-1.67, -1.049),(-1.67, -2.46),(-0.621, -3.3), (0.595, -2.58),(0.595, -0.544),(-0.207,0.263),(-0.207,0.263)]
-jar1_waypoints = [(0.957,-0.082)]
-jar1_place_waypoints = [(0.38,-0.583)]
-jar2_waypoints = [(1.14,0.466)]
 
-
-# Used to store global state
+# Used to store global state. I don't use a class because a simple dictionary is sufficient.
 blackboard = {}
 blackboard['robot'] = robot
 blackboard['map_width'] = 430 
@@ -47,12 +44,15 @@ blackboard.get('lidar').enable(blackboard.get('timestep'))
 blackboard.get('camera').enable(blackboard.get('timestep'))
 blackboard.get('camera').recognitionEnable(blackboard.get('timestep'))
 
+#Used to save the cmap
 blackboard['filepath'] = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/cspace.npy'
 
 print(f'world timestep is {blackboard.get('timestep')}')
 
-#Data
-#Robot arm safe position
+
+'''
+Below are all of the non-trivial kinematic position presets I use to move the robot's elbow, shoulders, and fingers in addition to the lift joint
+'''
 safety = {
     'torso_lift_joint' : 0.35,
     'arm_1_joint' : 0.71,
@@ -151,7 +151,8 @@ blackboard['joint_targets'] = safety
 
 
 '''
-The behavior tree declaration.
+Explaination of behavior classes.
+
 DoesMapExist
 If the Map Exists, we skip the mapping subroutine and go straight to planning the lower left corner path.
 
@@ -160,30 +161,21 @@ The mapping class is standard and uses the same codebase as our previous peer gr
 As input, the Mapping class uses the lidar information to create a probability map and then uses
 the completed probability map to produce the convolution map.
 
+PlanningBFS
+Planning class uses the BFS algorithm to find the shortest path using 8 way navigation
+
 Planning
-Planning class uses the Rapidly-exploring Random Trees algorithm (RRT) with straight line collision checking.
+I also experimented with Rapidly-exploring Random Trees algorithm (RRT) with straight line collision checking.
 My point sampling algorithm biases towards the goal 10% of the time.
 As input, the RTT algorithm  uses the convolution map, the robot's current x,y coords, and the goal x,y coords to plan the path.
+This algorithm is not as predictable as BFS so I omitted it from the final behavior tree.
+
+ServoArm
+Moves the arm joints and the lift joint of the robot. Used for implementing non-trivial kinematics such as bending at the elbow
+to move back and forth, using the shoulder joint to steer the arm toward the target
 
 Navigation
 Tha Navigation class is also pretty standard. The navigation routine takes as input an array of waypoints, and uses those waypoints to guide the robot on a path from start to goal nodes.
-'''
-
-'''
-tree = Sequence("Main", children = [
-	ServoArm('Move arm to safety',safety,blackboard),
-	Selector('Does map exist?', children=[
-        DoesMapExist('Check for saved map',blackboard),
-        Parallel("Mapping",ParallelPolicy.SuccessOnOne(), children=[
-            Mapping("map the environment", blackboard),
-            Navigation("move around the table", blackboard) 
-        ])		
-    ],memory=True),
-	Planning("compute path to lower left corner",blackboard,(-1.36,-3.22)),
-	Navigation("move to the lower left ocrner",blackboard),
-    Planning("compute path to sink",blackboard,(0.01, 0.01)), 
-    Navigation("move to sink",blackboard)
-],memory=True)
 '''
 
 tree = Sequence('Main', children = [
@@ -197,9 +189,8 @@ tree = Sequence('Main', children = [
             Navigation("move around the table", blackboard) 
         ])		
     ],memory=True),
-	Sequence('Navigate room', children = [
+	Sequence('Map and Navigate room', children = [
 	    PlanningBFS("compute path to lower left corner",blackboard,(-1.33,-3.01)),
-        #Planning("compute path to lower left corner",blackboard,(0.894,-0.163)),
         Navigation("move to the lower left ocrner",blackboard),
         PlanningBFS("compute path to sink",blackboard,(0.0, 0.18)), 
         Navigation("move to sink",blackboard)
@@ -207,11 +198,11 @@ tree = Sequence('Main', children = [
 	
     Sequence('Place all 3 jars', children = [
 		InitObjectManip('Start object manipulation sequence',blackboard),
-		ServoArm('Lower Tiao',zero_torso,blackboard),
+		ServoArm('Lower Torso to Zero',zero_torso,blackboard),
         ServoArm('Bend Arm',bend,blackboard),
 		Sequence('Jar 1', children = [
             ServoArm('Move arm to Jar 1',reach,blackboard),
-            PlanningSimple("Path to Jar 1",jar1_waypoints,blackboard),
+            PlanningSimple("Path to Jar 1",[(0.957,-0.082)],blackboard),
             Navigation('Move robot to Jar 1',blackboard),
             ServoArm('Grip Jar 1',close_grip,blackboard),
             ServoArm('Bend Arm',bend,blackboard),
@@ -247,7 +238,6 @@ tree = Sequence('Main', children = [
             TurnDegrees('Turn towards jar 3',blackboard,135),
 			ServoArm('Bend Arm',bend,blackboard),
 			ServoArm('Reach for jar 3',reach,blackboard),
-            #1.27,0.0759
 			PlanningSimple('Path towards Jar 3', [(1.27,0.0784)],blackboard),
 			Navigation('Move robot to Jar 3',blackboard),
 			ServoArm('Grip Jar 3',close_grip,blackboard),
@@ -265,17 +255,14 @@ tree = Sequence('Main', children = [
     ],memory=True)
 ],memory=True)
 
-
-
-
-#TODO pick up jar 3
+#Initialize the behavior tree and start the main loop
 tree.setup_with_descendants()
 log_tree.level = log_tree.Level.DEBUG
 
 while robot.step(blackboard.get('timestep')) != -1:
 	tree.tick_once()
 	if tree.status == Status.SUCCESS:
-		print("All joints reached their target positions.")
+		print("Simulation complete!")
 		break
 	elif tree.status == Status.RUNNING:
-		print("Moving joints to target positions...")
+		print("Simulation running...")

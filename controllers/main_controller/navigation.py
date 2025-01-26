@@ -45,7 +45,9 @@ class Navigation(Behaviour):
         self.marker = self.robot.getFromDef('marker').getField('translation')
 
     def update(self):
-        print(f'index:{self.index} of {len(self.waypoints)}')
+        print(f'Waypoint:{self.index} of {len(self.waypoints)}')
+        print('---- Some waypoints make take a minute. Thank you for your patience!! ----')
+        print('---- You can toggle the hide/show render button to speed up navigation!! ----')
         if self.index == len(self.waypoints):
             self.leftspeed = 0
             self.rightspeed = 0
