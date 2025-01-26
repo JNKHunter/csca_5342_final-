@@ -73,7 +73,7 @@ def grow_rrt_with_pixel_snapping(map, start, goal, Dq, iterations=2500):
     """
     # Initialize the graph with the start node
     G = {start: []} 
-    parent = {start: None}  # Track parent nodes for path reconstruction
+    parent = {start: None} 
 
     for _ in range(iterations):
         # Sample a random configuration
