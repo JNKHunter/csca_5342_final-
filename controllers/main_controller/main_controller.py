@@ -22,10 +22,10 @@ from move_marker import MoveMarker
 # create the Robot instance.
 robot = Supervisor()
 
-#The mapping waypoints.
+#The mapping waypoints. These are the waypoints for the first robot circuit around the table to detect objects inte room
 mapping_waypoints = [(0.595, -0.544), (0.595,-2.58), (-0.621, -3.3),(-1.72, -2.46),(-1.72, -2.16),(-1.72, -1.96), (-1.72, -0.431),(-0.416, 0.428),(-1.24, 0.0458),(-1.59, -0.305),(-1.67, -0.651),(-1.67, -1.049),(-1.67, -2.46),(-0.621, -3.3), (0.595, -2.58),(0.595, -0.544),(-0.207,0.263),(-0.207,0.263)]
 
-# Used to store global state. I don't use a class because a simple dictionary is sufficient.
+# Blackboard dictionary. Used to store global state. I don't use a class because a simple dictionary is sufficient.
 blackboard = {}
 blackboard['robot'] = robot
 blackboard['map_width'] = 430 
@@ -51,7 +51,8 @@ print(f'world timestep is {blackboard.get('timestep')}')
 
 
 '''
-Below are all of the non-trivial kinematic position presets I use to move the robot's elbow, shoulders, and fingers in addition to the lift joint
+Below are all of the non-trivial kinematic position presets I use to move the robot's elbow, shoulders, and fingers in addition to the lift joint.
+These are packaged up in dictionaries for reuse.
 '''
 safety = {
     'torso_lift_joint' : 0.35,
@@ -179,8 +180,6 @@ Tha Navigation class is also pretty standard. The navigation routine takes as in
 '''
 
 tree = Sequence('Main', children = [
-	#ServoArm('Move arm to safety',safety,blackboard),
-    #DetectJamJar('Detect Jars', blackboard),
     ServoArm('Move arm to safety', safety, blackboard),
 	Selector('Does map exist?', children=[
         DoesMapExist('Check for saved map',blackboard),
@@ -265,4 +264,4 @@ while robot.step(blackboard.get('timestep')) != -1:
 		print("Simulation complete!")
 		break
 	elif tree.status == Status.RUNNING:
-		print("Simulation running...")
+		print("Simulation running...If the simulation crashes, please restart the Webots app.")

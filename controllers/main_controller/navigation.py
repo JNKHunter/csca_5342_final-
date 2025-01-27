@@ -43,7 +43,7 @@ class Navigation(Behaviour):
 
     def update(self):
         print(f'Waypoint:{self.index} of {len(self.waypoints)}')
-        print('---- Sometimes the robot moves VERY slowly and certain waypoints make take a minute. Thank you for your patience!! ----')
+        print('---- The robot moves VERY slowly for certain waypoints and will take a minute (like waypoint 30 on move to sink) Thank you for your patience!! ----')
         print('---- You can toggle the hide/show render button to speed up navigation!! ----')
         if self.index == len(self.waypoints):
             self.leftspeed = 0
