@@ -19,7 +19,7 @@ from drive_backward import DriveBackward
 from init_object_manip import InitObjectManip
 from move_marker import MoveMarker
 from approach import Approach
-
+from wait import Wait
 # create the Robot instance.
 robot = Supervisor()
 
@@ -71,7 +71,7 @@ safety = {
 }
 
 reach = {
-    'torso_lift_joint' : 0.28,
+    'torso_lift_joint' : 0.26,
     'arm_1_joint' : 1.58,
     'arm_2_joint' : 0.0,
     'arm_3_joint' : 0.0,
@@ -99,7 +99,7 @@ zero_torso = {
 
 
 prep_release = {
-	'torso_lift_joint' : 0.20,
+	'torso_lift_joint' : 0.25,
 }
 
 reach_maintain_grip = {
@@ -184,22 +184,40 @@ blackboard['cspace'] = np.load(blackboard.get('filepath'))
 
 tree = Sequence('Main', children = [
     Sequence(name=f"Get Jar 1", children=[
-            #PlanningBFS(f"Compute path to jar 1", blackboard, (0.687, 0.279)),
-			ServoArm('Move arm to safety', safety, blackboard),
-            PlanningBFS(f"Compute path to jar 1", blackboard, (0.688, 0.0453)),
-            Navigation(f"Move to jar 1", blackboard),
-            ServoArm('Reach for jar 1',reach,blackboard),
-            Approach(f"Align to jar 1", blackboard),
-            ServoArm('Grip Jar 1',close_grip,blackboard),
-			ServoArm('Raise torso after grabbing Jar 1',lift_torso,blackboard),
-			DriveBackward('Drive backward', blackboard,-0.10),
-            TurnDegrees('Turn to place jar 1',blackboard,-117),
-            PlanningBFS(f"Compute path to table ", blackboard, (0.245, -0.355)),
-            Navigation(f"Move to table", blackboard),
-			ServoArm('Reach for place jar 1',reach_maintain_grip,blackboard),
-            ServoArm('Release Jar 1', open_grip, blackboard),
-            #ServoArm('Lift torso', lift_torso, blackboard)
+        #PlanningBFS(f"Compute path to jar 1", blackboard, (0.687, 0.279)),
+        ServoArm('Move arm to safety', safety, blackboard),
+        PlanningBFS(f"Compute path to jar 1", blackboard, (0.688, 0.0453)),
+        Navigation(f"Move to jar 1", blackboard),
+        ServoArm('Reach for jar 1',reach,blackboard),
+        Approach(f"Align to jar 1", blackboard),
+        ServoArm('Grip Jar 1',close_grip,blackboard),
+        ServoArm('Raise torso after grabbing Jar 1',lift_torso,blackboard),
+        DriveBackward('Drive backward', blackboard,-0.10),
+        TurnDegrees('Turn to place jar 1',blackboard,-117),
+		ServoArm('Lower torso to place Jar 2', prep_release, blackboard),
+        ServoArm('Release Jar 1', open_grip, blackboard),
+		Wait('Wait for jar 1')
+    ],memory=True),
+    Sequence(name=f"Get Jar 1", children=[
+        ServoArm('Move arm to safety', safety, blackboard),
+        PlanningBFS(f"Compute path to jar 2", blackboard, (0.681, 0.273)),
+        Navigation(f"Move to jar 2", blackboard),
+        ServoArm('Reach for jar 2',reach,blackboard),
+        Approach(f"Align to jar 2", blackboard),
+        ServoArm('Grip Jar 2',close_grip,blackboard),
+        ServoArm('Raise torso after grabbing Jar 2',lift_torso,blackboard),
+        DriveBackward('Drive backward', blackboard,0.10),
+        TurnDegrees('Turn to place jar 2',blackboard,-170),
+		ServoArm('Lower torso to place Jar 2', prep_release, blackboard),
+		ServoArm('Release Jar 2', open_grip, blackboard,blackboard),
+		Wait('Wait for jar 2')
+        #PlanningBFS(f"Compute path to table ", blackboard, (0.245, -0.355)),
+        #Navigation(f"Move to table", blackboard),
+        #ServoArm('Reach for place jar 2',reach_maintain_grip,blackboard),
+        #ServoArm('Release Jar 2', open_grip, blackboard),
+        #ServoArm('Lift torso', lift_torso, blackboard)
     ],memory=True)
+
 ],memory=True)
 
 
