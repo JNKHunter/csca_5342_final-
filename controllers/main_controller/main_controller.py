@@ -71,14 +71,14 @@ safety = {
 }
 
 reach = {
-    'torso_lift_joint' : 0.26,
-    'arm_1_joint' : 1.68,
-    'arm_2_joint' : -0.03,
-    'arm_3_joint' : -1.6,
+    'torso_lift_joint' : 0.28,
+    'arm_1_joint' : 1.58,
+    'arm_2_joint' : 0.0,
+    'arm_3_joint' : 0.0,
     'arm_4_joint' : 0,
     'arm_5_joint' : 0,
     'arm_6_joint' : 0,
-    'arm_7_joint' : 0,
+    'arm_7_joint' : 1.571,
     'gripper_left_finger_joint' : 0.045,
     'gripper_right_finger_joint': 0.045,
     'head_1_joint':0,
@@ -204,7 +204,7 @@ blackboard['cspace'] = np.load(blackboard.get('filepath'))
 tree = Sequence('Main', children = [
     ServoArm('Move arm to safety', safety, blackboard),
     Sequence(name=f"Get Jar 1", memory=True, children=[
-            PlanningBFS(f"Compute path to jar 1", blackboard, (0.6, 0.704)),
+            PlanningBFS(f"Compute path to jar 1", blackboard, (0.687, 0.279)),
             Navigation(f"Move to jar 1", blackboard),
             ServoArm('Reach for jar 3',reach,blackboard),
             Approach(f"Align to jar 1", blackboard),
