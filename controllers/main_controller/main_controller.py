@@ -209,7 +209,7 @@ tree = Sequence('Main', children = [
         DriveBackward('Drive backward', blackboard,0.10),
         TurnDegrees('Turn to place jar 2',blackboard,-170),
 		ServoArm('Lower torso to place Jar 2', prep_release, blackboard),
-		ServoArm('Release Jar 2', open_grip, blackboard,blackboard),
+		ServoArm('Release Jar 2', open_grip,blackboard),
 		Wait('Wait for jar 2')
         #PlanningBFS(f"Compute path to table ", blackboard, (0.245, -0.355)),
         #Navigation(f"Move to table", blackboard),
