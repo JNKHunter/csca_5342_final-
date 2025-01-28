@@ -209,14 +209,15 @@ tree = Sequence('Main', children = [
             ServoArm('Reach for jar 3',reach,blackboard),
             Approach(f"Align to jar 1", blackboard),
             ServoArm('Grip Jar 3',close_grip,blackboard),
-            TurnDegrees('Turn to place jar 3',blackboard,180),
+			DriveBackward('Drive backward', blackboard,0.10),
+            TurnDegrees('Turn to place jar 3',blackboard,-170),
             PlanningBFS(f"Compute path to table ", blackboard, (-0.228, -0.318)),
-            Navigation(f"Move to table 1", blackboard),
+            Navigation(f"Move to table", blackboard),
             ServoArm('Release Jar 3', open_grip, blackboard),
             ServoArm('Lift torso', lift_torso, blackboard)
     ])
 ],memory=True)
-        
+
 
 #Initialize the behavior tree and start the main loop
 tree.setup_with_descendants()
