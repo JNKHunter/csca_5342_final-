@@ -18,6 +18,7 @@ from turn_degrees import TurnDegrees
 from drive_backward import DriveBackward
 from init_object_manip import InitObjectManip
 from move_marker import MoveMarker
+from approach import Approach
 
 # create the Robot instance.
 robot = Supervisor()
@@ -178,81 +179,43 @@ to move back and forth, using the shoulder joint to steer the arm toward the tar
 Navigation
 Tha Navigation class is also pretty standard. The navigation routine takes as input an array of waypoints, and uses those waypoints to guide the robot on a path from start to goal nodes.
 '''
+'''
+def create_jar_handling_subtree(index, jar_waypoint, blackboard, table_coord):
+    return Sequence(
+        name=f"Get Jar 1",
+        memory=True,
+        children=[
+            Planning(f"Compute path to sink 1", blackboard, (0.6, 0.704)),
+            Navigation(f"Move to sink {index+1}", blackboard),
+            ServoArm('Reach for jar 3',reach,blackboard),
+            Align(f"Align to jar 1", blackboard),
+            ServoArm('Grip Jar 3',close_grip,blackboard)
+            TurnDegrees('Turn to place jar 3',blackboard,180),
+            Planning(f"Compute path to table ", blackboard, (-0.228, -0.318)),
+            Navigation(f"Move to table {index+1}", blackboard),
+            ServoArm('Release Jar 3', open_grip, blackboard),
+            ServoArm('Lift torso', lift_torso, blackboard),
+        ]
+    )
+'''
+jar_positions = [(0.6, 0.704), (0.8, 0.494), (0.8, 0.024)]
 
 tree = Sequence('Main', children = [
     ServoArm('Move arm to safety', safety, blackboard),
-	Selector('Does map exist?', children=[
-        DoesMapExist('Check for saved map',blackboard),
-        Parallel("Mapping",ParallelPolicy.SuccessOnOne(), children=[
-            Mapping("map the environment", blackboard),
-            Navigation("move around the table", blackboard) 
-        ])		
-    ],memory=True),
-	Sequence('Map and Navigate room', children = [
-	    PlanningBFS("compute path to lower left corner",blackboard,(-1.33,-3.01)),
-        Navigation("move to the lower left ocrner",blackboard),
-        PlanningBFS("compute path to sink",blackboard,(0.0, 0.18)), 
-        Navigation("move to sink",blackboard)
-    ],memory=True),
-	
-    Sequence('Place all 3 jars', children = [
-		InitObjectManip('Start object manipulation sequence',blackboard),
-		ServoArm('Lower Torso to Zero',zero_torso,blackboard),
-        ServoArm('Bend Arm',bend,blackboard),
-		Sequence('Jar 1', children = [
-            ServoArm('Move arm to Jar 1',reach,blackboard),
-            PlanningSimple("Path to Jar 1",[(0.957,-0.082)],blackboard),
-            Navigation('Move robot to Jar 1',blackboard),
-            ServoArm('Grip Jar 1',close_grip,blackboard),
-            ServoArm('Bend Arm',bend,blackboard),
-            PlanningSimple("Path to place Jar 1", [(0.38,-0.583)],blackboard),
-            Navigation('Move robot to place Jar 1',blackboard),
-            ServoArm('Move arm to place Jar 1', reach_maintain_grip, blackboard),
-			ServoArm('Prep Release Jar 1', prep_release, blackboard),
-            ServoArm('Release Jar 1', open_grip, blackboard),
-			ServoArm('Lift torso', lift_torso, blackboard)			
-        ],memory=True),
-		Sequence('Jar 2', children = [
-            ServoArm('Bend Arm',bend,blackboard),
-            PlanningSimple('Plan turn towards Jar 2', [(0.707,0.0141)],blackboard),
-            Navigation('Turn to Jar 2',blackboard),
-            ServoArm('Move arm to Jar 2', reach, blackboard),
-            #PlanningSimple('Path towards Jar 2', [(1.09,0.22)],blackboard),#original
-			PlanningSimple('Path towards Jar 2', [(1.10,0.215)],blackboard),
-            #PlanningSimple('Path towards Jar 2', [(1.12,0.209)],blackboard),#too far
-            Navigation('move robot to Jar 2',blackboard),
-            ServoArm('Grip Jar 2',close_grip,blackboard),
-            ServoArm('Bend Arm',bend,blackboard),
-            TurnDegrees('Turn 180 jar 2',blackboard,180),
-            ServoArm('Move arm to place Jar 2', reach_maintain_grip, blackboard),
-            PlanningSimple('Path towards Jar 2', [(0.208,-0.212)],blackboard),
-            Navigation('move robot to place Jar 2',blackboard),
-			ServoArm('Prep Release Jar 2', prep_release, blackboard),
-            ServoArm('Release Jar 2', open_grip, blackboard),
-			ServoArm('Lift torso', lift_torso, blackboard)			
-        ],memory=True),
-		Sequence('Jar 3', children = [
-            ServoArm('Bend Arm',bend,blackboard),
-			ServoArm('Bend Arm',safety,blackboard),
-            TurnDegrees('Turn towards jar 3',blackboard,135),
-			ServoArm('Bend Arm',bend,blackboard),
-			ServoArm('Reach for jar 3',reach,blackboard),
-			PlanningSimple('Path towards Jar 3', [(1.27,0.0784)],blackboard),
-			Navigation('Move robot to Jar 3',blackboard),
-			ServoArm('Grip Jar 3',close_grip,blackboard),
-			ServoArm('Bend Arm',bend,blackboard),
-            MoveMarker('Move marker out of the way',blackboard),
-			DriveBackward('Drive backward', blackboard,0.10),
+    Sequence(name=f"Get Jar 1", memory=True, children=[
+            Planning(f"Compute path to sink 1", blackboard, (0.6, 0.704)),
+            Navigation(f"Move to jar 1", blackboard),
+            ServoArm('Reach for jar 3',reach,blackboard),
+            Approach(f"Align to jar 1", blackboard),
+            ServoArm('Grip Jar 3',close_grip,blackboard),
             TurnDegrees('Turn to place jar 3',blackboard,180),
-			PlanningSimple('Path towards place Jar 3', [(0.199,-0.276)],blackboard),
-			Navigation('Move robot to Jar 3',blackboard),
-			ServoArm('Move arm to place Jar 3',reach_maintain_grip,blackboard),
-			ServoArm('Prep Release Jar 3', prep_release, blackboard),
-			ServoArm('Release Jar 3', open_grip, blackboard),
-			ServoArm('Lift torso', lift_torso, blackboard)
-        ],memory=True)
-    ],memory=True)
+            Planning(f"Compute path to table ", blackboard, (-0.228, -0.318)),
+            Navigation(f"Move to table 1", blackboard),
+            ServoArm('Release Jar 3', open_grip, blackboard),
+            ServoArm('Lift torso', lift_torso, blackboard)
+    ])
 ],memory=True)
+        
 
 #Initialize the behavior tree and start the main loop
 tree.setup_with_descendants()
