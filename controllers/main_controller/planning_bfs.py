@@ -76,7 +76,7 @@ class PlanningBFS(Behaviour):
         if len(self.path) > 0:
             return Status.SUCCESS
         else:
-            return Status.FAILED
+            return Status.FAILURE
 
     '''
     When this behavior is complete, prepare the shortest path found and save to the blackboard.

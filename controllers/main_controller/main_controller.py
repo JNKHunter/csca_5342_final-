@@ -199,17 +199,18 @@ def create_jar_handling_subtree(index, jar_waypoint, blackboard, table_coord):
     )
 '''
 jar_positions = [(0.6, 0.704), (0.8, 0.494), (0.8, 0.024)]
+blackboard['cspace'] = np.load(blackboard.get('filepath'))
 
 tree = Sequence('Main', children = [
     ServoArm('Move arm to safety', safety, blackboard),
     Sequence(name=f"Get Jar 1", memory=True, children=[
-            Planning(f"Compute path to sink 1", blackboard, (0.6, 0.704)),
+            PlanningBFS(f"Compute path to jar 1", blackboard, (0.6, 0.704)),
             Navigation(f"Move to jar 1", blackboard),
             ServoArm('Reach for jar 3',reach,blackboard),
             Approach(f"Align to jar 1", blackboard),
             ServoArm('Grip Jar 3',close_grip,blackboard),
             TurnDegrees('Turn to place jar 3',blackboard,180),
-            Planning(f"Compute path to table ", blackboard, (-0.228, -0.318)),
+            PlanningBFS(f"Compute path to table ", blackboard, (-0.228, -0.318)),
             Navigation(f"Move to table 1", blackboard),
             ServoArm('Release Jar 3', open_grip, blackboard),
             ServoArm('Lift torso', lift_torso, blackboard)
